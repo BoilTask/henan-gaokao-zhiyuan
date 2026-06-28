@@ -1028,17 +1028,27 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
         </div>
         <div class="fieldset-body">
           <div class="field">
+            <label>国标代码（用于自动查询）</label>
+            <input type="text" id="g_nationalCode" placeholder="如 10006（北京航空航天大学）">
+            <div class="hint">填写后点下方按钮自动从河小阳获取近三年录取分数</div>
+          </div>
+          <div class="field">
             <label>近三年录取参考</label>
             <div class="hist-tools">
-              <button type="button" class="hist-tool-btn primary" onclick="toggleHistPaste()">
+              <button type="button" class="hist-tool-btn primary" onclick="fetchScoresFromAPI()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                自动获取录取数据
+              </button>
+              <button type="button" class="hist-tool-btn" onclick="toggleHistPaste()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                 智能粘贴
               </button>
               <button type="button" class="hist-tool-btn" onclick="openScoreQuery()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                查询录取数据
+                阳光高考查询
               </button>
             </div>
+            <div id="histFetchStatus" class="hist-parse-hint" style="margin-bottom:6px"></div>
             <div class="hist-paste-area" id="histPasteArea" style="display:none">
               <textarea id="histPasteText" placeholder="从阳光高考 / 河南招生考试网复制录取数据后粘贴于此&#10;&#10;支持格式：&#10;• 表格（年份 最低分 最低位次）&#10;• 自然语言（2025年最低分570，位次85847）&#10;• 简写（2025: 570 / 85847）"></textarea>
               <div class="hist-paste-actions">
@@ -1510,7 +1520,8 @@ function normalizeConfig(c){
   }
   return {
     history:history,
-    note:c.note||''
+    note:c.note||'',
+    nationalCode:c.nationalCode||''
   };
 }
 
@@ -1775,6 +1786,117 @@ function openScoreQuery(){
     hint.textContent = '已在新标签页打开阳光高考，搜索到院校后进入「往年录取信息」，选择河南物理类，复制表格数据后回到此处粘贴';
   }
 }
+
+/* ========== 自动从河小阳 API 获取录取数据 ========== */
+const HXY_API = 'https://www.gaokao.haedu.cn/api';
+
+async function fetchScoresFromAPI(){
+  const nationalCode = val('g_nationalCode').trim();
+  if(!nationalCode){ toast('请先填写国标代码（如 10006）','err'); return; }
+
+  const statusEl = document.getElementById('histFetchStatus');
+  statusEl.className = 'hist-parse-hint';
+  statusEl.textContent = '正在查询...';
+
+  // 先去学校首页获取 category_code
+  let catCode = null;
+  try{
+    const homeResp = await fetch(`https://${nationalCode}.gaokao.haedu.cn/`, {signal: AbortSignal.timeout(5000)});
+    const homeHtml = await homeResp.text();
+    const ccMatch = homeHtml.match(/score\/cutoff\/list_(\d+)_1\.html/);
+    if(ccMatch){
+      const scoreResp = await fetch(`https://${nationalCode}.gaokao.haedu.cn/score/cutoff/list_${ccMatch[1]}_1.html`, {signal: AbortSignal.timeout(5000)});
+      const scoreHtml = await scoreResp.text();
+      const m = scoreHtml.match(/category_code[:\s]*`?(\d+)`?/);
+      if(m) catCode = m[1];
+    }
+  }catch(e){}
+
+  if(!catCode){
+    statusEl.className = 'hist-parse-hint err';
+    statusEl.textContent = '未找到该院校的录取数据，请确认国标代码正确（如北航=10006）';
+    return;
+  }
+
+  // 查询三年数据（物理/理科）
+  const results = {};
+  const queries = [
+    {year:'2025', batch:'', fc:''},
+    {year:'2024', batch:'', fc:''},
+    {year:'2023', batch:'', fc:''},
+  ];
+
+  for(const q of queries){
+    try{
+      const resp = await fetch(HXY_API + '/zy_admission/index', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          page:1, page_size:50, category:1,
+          gb_code:nationalCode, year:q.year,
+          batch_code:'', first_choice_code:'',
+          major_enrollment_code:'', major_name:'',
+          category_code:catCode, keyword:''
+        })
+      });
+      const data = await resp.json();
+      if(data.code===1 && data.data){
+        results[q.year] = data.data.data || [];
+      }
+    }catch(e){}
+  }
+
+  // 筛选物理/理科，计算最低分
+  const scoreMap = {};
+  for(const [year, records] of Object.entries(results)){
+    // 筛选物理或理科记录
+    const filtered = records.filter(r =>
+      (r.first_choice||'').includes('物理') || (r.first_choice||'').includes('理科')
+    );
+    if(filtered.length===0) continue;
+
+    // 找最低分（有分数的最小值）
+    const scores = filtered.map(r=>parseInt(r.admission_score_min)).filter(s=>!isNaN(s));
+    if(scores.length===0) continue;
+    scoreMap[year] = {
+      score: String(Math.min(...scores)),
+      count: filtered.length,
+      groups: [...new Set(filtered.map(r=>r.major_group_code).filter(Boolean))]
+    };
+  }
+
+  // 填充到表单
+  const sortedYears = Object.keys(scoreMap).sort((a,b)=>parseInt(b)-parseInt(a)).slice(0,3);
+  let filled = 0;
+  sortedYears.forEach((year, i)=>{
+    if(i>=3) return;
+    const d = scoreMap[year];
+    setVal('g_hist_year_'+i, year);
+    setVal('g_hist_rank_'+i, '');
+    setVal('g_hist_score_'+i, d.score);
+    filled++;
+  });
+  // 清空剩余行
+  for(let i=sortedYears.length; i<3; i++){
+    setVal('g_hist_year_'+i, '');
+    setVal('g_hist_rank_'+i, '');
+    setVal('g_hist_score_'+i, '');
+  }
+
+  if(filled===0){
+    statusEl.className = 'hist-parse-hint err';
+    statusEl.textContent = '未能获取到录取数据';
+  }else{
+    statusEl.className = 'hist-parse-hint ok';
+    const parts = sortedYears.map(y=>{
+      const d = scoreMap[y];
+      const grpInfo = d.groups.length>0 ? ' 专业组:'+d.groups.join(',') : '';
+      return y+'年 最低'+d.score+'分 ('+d.count+'条记录'+grpInfo+')';
+    });
+    statusEl.textContent = '已获取 '+filled+' 年：'+parts.join('；');
+    document.getElementById('cfgFieldset').classList.add('open');
+  }
+}
 function parseHistPaste(){
   const text = document.getElementById('histPasteText').value.trim();
   const hint = document.getElementById('histParseHint');
@@ -1887,6 +2009,7 @@ function openGroupModal(id){
     const c = normalizeConfig(g.config);
     fillHistInputs(c);
     setVal('g_note',c.note||'');
+    setVal('g_nationalCode',c.nationalCode||'');
     if(hasConfigData(c)) document.getElementById('cfgFieldset').classList.add('open');
   }else{
     setVal('g_schoolCode',''); setVal('g_schoolName',''); setVal('g_groupCode','');
@@ -1895,6 +2018,7 @@ function openGroupModal(id){
     setRadio('g_hidden','false');
     fillHistInputs({});
     setVal('g_note','');
+    setVal('g_nationalCode','');
   }
   ov.classList.add('show');
 }
@@ -1915,6 +2039,7 @@ function cloneGroup(id){
   const c = normalizeConfig(g.config);
   fillHistInputs(c);
   setVal('g_note',c.note||'');
+  setVal('g_nationalCode',c.nationalCode||'');
   if(hasConfigData(c)) document.getElementById('cfgFieldset').classList.add('open');
   ov.classList.add('show');
 }
@@ -1933,7 +2058,8 @@ function saveGroup(){
     hidden: getRadio('g_hidden')==='true',
     config:{
       history:collectHistInputs(),
-      note:val('g_note').trim()
+      note:val('g_note').trim(),
+      nationalCode:val('g_nationalCode').trim()
     }
   };
   if(id){
