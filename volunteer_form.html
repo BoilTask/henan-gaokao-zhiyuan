@@ -1029,22 +1029,14 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
         </div>
         <div class="fieldset-body">
           <div class="field">
-            <label>国标代码（用于自动查询）</label>
-            <div style="display:flex;gap:8px">
-              <input type="text" id="g_nationalCode" placeholder="如 10006" style="flex:1" oninput="onNationalCodeInput()" list="schoolCodeList">
-              <button type="button" class="btn" onclick="searchSchoolCode()" style="white-space:nowrap;flex:none">🔍 搜索</button>
-            </div>
-            <datalist id="schoolCodeList"></datalist>
-            <div id="g_ncHint" class="hint">填写后点下方按钮自动从河小阳获取近三年录取分数</div>
+            <label>国标代码</label>
+            <input type="text" id="g_nationalCode" placeholder="如 10006（北京航空航天大学）">
+            <div class="hint">院校在河小阳 (gaokao.haedu.cn) 子域名中的数字代码</div>
           </div>
           <div class="field">
             <label>近三年录取参考</label>
             <div class="hist-tools">
-              <button type="button" class="hist-tool-btn primary" onclick="fetchScoresFromAPI()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                自动获取录取数据
-              </button>
-              <button type="button" class="hist-tool-btn" onclick="toggleHistPaste()">
+              <button type="button" class="hist-tool-btn primary" onclick="toggleHistPaste()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
                 智能粘贴
               </button>
@@ -1053,7 +1045,6 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
                 阳光高考查询
               </button>
             </div>
-            <div id="histFetchStatus" class="hist-parse-hint" style="margin-bottom:6px"></div>
             <div class="hist-paste-area" id="histPasteArea" style="display:none">
               <textarea id="histPasteText" placeholder="从阳光高考 / 河南招生考试网复制录取数据后粘贴于此&#10;&#10;支持格式：&#10;• 表格（年份 最低分 最低位次）&#10;• 自然语言（2025年最低分570，位次85847）&#10;• 简写（2025: 570 / 85847）"></textarea>
               <div class="hist-paste-actions">
@@ -2734,8 +2725,6 @@ window.addEventListener('afterprint', ()=>{
 });
 
 async function init(){
-  // 初始化学校代码列表
-  initSchoolDatalist();
   // 先加载本地数据作为初始值
   state = loadLocal();
 
