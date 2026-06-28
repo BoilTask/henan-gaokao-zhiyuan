@@ -1030,8 +1030,12 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
         <div class="fieldset-body">
           <div class="field">
             <label>国标代码（用于自动查询）</label>
-            <input type="text" id="g_nationalCode" placeholder="如 10006（北京航空航天大学）">
-            <div class="hint">填写后点下方按钮自动从河小阳获取近三年录取分数</div>
+            <div style="display:flex;gap:8px">
+              <input type="text" id="g_nationalCode" placeholder="如 10006" style="flex:1" oninput="onNationalCodeInput()" list="schoolCodeList">
+              <button type="button" class="btn" onclick="searchSchoolCode()" style="white-space:nowrap;flex:none">🔍 搜索</button>
+            </div>
+            <datalist id="schoolCodeList"></datalist>
+            <div id="g_ncHint" class="hint">填写后点下方按钮自动从河小阳获取近三年录取分数</div>
           </div>
           <div class="field">
             <label>近三年录取参考</label>
@@ -1786,6 +1790,87 @@ function openScoreQuery(){
     hint.className = 'hist-parse-hint';
     hint.textContent = '已在新标签页打开阳光高考，搜索到院校后进入「往年录取信息」，选择河南物理类，复制表格数据后回到此处粘贴';
   }
+}
+
+/* ========== 院校国标代码搜索 ========== */
+// 内置常用院校代码表（从河小阳验证）
+const KNOWN_SCHOOLS = {
+  "北京大学":"10001","中国人民大学":"10002","清华大学":"10003","北京交通大学":"10004",
+  "北京航空航天大学":"10006","北京理工大学":"10007","北京科技大学":"10008","北京邮电大学":"10013",
+  "北京师范大学":"10027","南开大学":"10055","天津大学":"10056","大连理工大学":"10141",
+  "吉林大学":"10183","哈尔滨工业大学":"10213","哈尔滨工业大学(威海)":"19213",
+  "复旦大学":"10246","同济大学":"10247","上海交通大学":"10248",
+  "南京大学":"10284","东南大学":"10286","南京理工大学":"10288","浙江大学":"10335",
+  "中国科学技术大学":"10358","厦门大学":"10384","山东大学":"10422",
+  "武汉大学":"10486","华中科技大学":"10487","湖南大学":"10532","中南大学":"10533",
+  "中山大学":"10558","华南理工大学":"10561","四川大学":"10610","重庆大学":"10611",
+  "电子科技大学":"10614","西安交通大学":"10698","西北工业大学":"10699",
+  "西安电子科技大学":"10701","兰州大学":"10730",
+  "哈尔滨工程大学":"10217","华东师范大学":"10269",
+  "北京师范大学(珠海校区)":"19027",
+  "北京工业大学":"10005","北京化工大学":"10010","北京林业大学":"10022",
+  "中国农业大学":"10019","中央民族大学":"10052","东北大学":"10145",
+  "中国海洋大学":"10423","西北农林科技大学":"10712",
+};
+
+function initSchoolDatalist(){
+  const dl = document.getElementById('schoolCodeList');
+  if(!dl || dl.children.length) return;
+  for(const [name, code] of Object.entries(KNOWN_SCHOOLS)){
+    dl.innerHTML += `<option value="${code}">${name}</option>`;
+  }
+}
+
+function onNationalCodeInput(){
+  const code = val('g_nationalCode').trim();
+  const hint = document.getElementById('g_ncHint');
+  // 查找匹配的学校名
+  for(const [name, c] of Object.entries(KNOWN_SCHOOLS)){
+    if(c === code){
+      hint.textContent = '✓ '+name+' — 点下方按钮自动获取录取数据';
+      hint.className = 'hint';
+      return;
+    }
+  }
+  hint.textContent = code ? '未识别此代码，可手动填写后点下方按钮' : '填写后点下方按钮自动从河小阳获取近三年录取分数';
+  hint.className = 'hint';
+}
+
+async function searchSchoolCode(){
+  const name = val('g_schoolName').trim();
+  if(!name){ toast('请先填写院校名称','err'); return; }
+
+  // 先查内置表
+  for(const [kn, kc] of Object.entries(KNOWN_SCHOOLS)){
+    if(kn.includes(name) || name.includes(kn)){
+      setVal('g_nationalCode', kc);
+      onNationalCodeInput();
+      toast('已匹配: '+kn+' ('+kc+')');
+      return;
+    }
+  }
+
+  // 内置表没找到，尝试从河小阳搜索
+  const hint = document.getElementById('g_ncHint');
+  hint.textContent = '正在搜索...';
+  hint.className = 'hist-parse-hint';
+  try{
+    // 尝试用院校名称作为子域名猜测
+    const resp = await fetch(`https://www.gaokao.haedu.cn/school/search?keyword=${encodeURIComponent(name)}`, {signal:AbortSignal.timeout(5000)});
+    const html = await resp.text();
+    const m = html.match(/href="\/\/(\d+)\.gaokao\.haedu\.cn/);
+    if(m){
+      setVal('g_nationalCode', m[1]);
+      onNationalCodeInput();
+      toast('已从河小阳搜索到代码: '+m[1]);
+      hint.textContent = '✓ 代码 '+m[1]+' — 点下方按钮获取录取数据';
+      hint.className = 'hint';
+      return;
+    }
+  }catch(e){}
+
+  hint.textContent = '未搜索到，请手动填写国标代码';
+  hint.className = 'hist-parse-hint err';
 }
 
 /* ========== 自动从河小阳 API 获取录取数据 ========== */
@@ -2649,6 +2734,8 @@ window.addEventListener('afterprint', ()=>{
 });
 
 async function init(){
+  // 初始化学校代码列表
+  initSchoolDatalist();
   // 先加载本地数据作为初始值
   state = loadLocal();
 
