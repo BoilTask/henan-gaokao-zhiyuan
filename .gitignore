@@ -1,0 +1,12 @@
+# 二进制文件
+server.exe
+server_linux
+*.exe
+
+# 数据文件（含密码/个人信息）
+volunteer_data.json
+*.json
+
+# 导出文件
+*.pdf
+*.png

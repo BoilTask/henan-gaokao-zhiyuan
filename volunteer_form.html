@@ -1,0 +1,2566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>河南2026高考志愿表 · 物理类</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@400;600;700;900&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --paper:#F4EFE4;
+  --paper-2:#FBF8F1;
+  --ink:#15212E;
+  --ink-soft:#3B4756;
+  --muted:#7C8593;
+  --line:#DDD4C2;
+  --line-soft:#E8E1D2;
+  --gold:#A87C2F;
+  --gold-soft:#C9A24A;
+  --teal:#1F5E5A;
+  --teal-soft:#D7E8E5;
+  --sage:#4F7A55;
+  --sage-soft:#DCEAD9;
+  --terra:#B0562E;
+  --terra-soft:#F0DDD0;
+  --danger:#A23B2E;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(21,33,46,.04), 0 6px 22px rgba(21,33,46,.07);
+  --shadow-lg:0 18px 60px rgba(21,33,46,.18);
+  --serif:"Noto Serif SC","Fraunces",serif;
+  --sans:"Noto Sans SC",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  --display:"Fraunces","Noto Serif SC",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--paper);
+  background-image:
+    radial-gradient(circle at 12% 8%, rgba(168,124,47,.06), transparent 38%),
+    radial-gradient(circle at 88% 92%, rgba(31,94,90,.06), transparent 42%);
+  color:var(--ink);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+/* paper grain overlay */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");
+}
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 22px 120px}
+
+/* ---------- topbar ---------- */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 0 14px;border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:14px}
+.brand-mark{
+  width:42px;height:42px;border-radius:11px;flex:none;
+  background:linear-gradient(145deg,#15212E,#27405a);
+  display:grid;place-items:center;color:var(--gold-soft);
+  font-family:var(--display);font-weight:800;font-size:22px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+}
+.brand-tx h1{font-family:var(--serif);font-weight:700;font-size:18px;letter-spacing:.5px}
+.brand-tx p{font-size:12px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.topbar-meta{display:flex;align-items:center;gap:18px;font-size:13px;color:var(--ink-soft)}
+.topbar-meta .dot{width:7px;height:7px;border-radius:50%;background:var(--sage);box-shadow:0 0 0 4px var(--sage-soft)}
+
+/* ---------- hero ---------- */
+.hero{padding:30px 0 24px}
+.hero-grid{display:grid;grid-template-columns:1fr auto;gap:34px;align-items:end}
+.hero-title{font-family:var(--serif);font-weight:900;font-size:42px;line-height:1.12;letter-spacing:-.5px}
+.hero-title em{font-family:var(--display);font-style:italic;font-weight:600;color:var(--gold)}
+.hero-sub{margin-top:12px;color:var(--ink-soft);font-size:15px;max-width:620px}
+.hero-sub b{color:var(--ink)}
+.scorecard{
+  display:flex;gap:14px;background:var(--paper-2);
+  border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;
+  box-shadow:var(--shadow);
+}
+.scorecard .sc-item{text-align:center;min-width:88px}
+.scorecard .sc-num{font-family:var(--display);font-weight:800;font-size:30px;line-height:1;color:var(--ink)}
+.scorecard .sc-num.gold{color:var(--gold)}
+.scorecard .sc-lab{font-size:11px;letter-spacing:2px;color:var(--muted);margin-top:7px;text-transform:uppercase}
+.scorecard .sc-div{width:1px;background:var(--line)}
+
+/* ---------- rules strip ---------- */
+.rules{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--line);border:1px solid var(--line);
+  border-radius:var(--radius);overflow:hidden;margin:8px 0 30px;
+}
+.rule{background:var(--paper-2);padding:15px 18px}
+.rule .rk{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-weight:700;font-size:14px;color:var(--teal)}
+.rule .rk .ri{width:24px;height:24px;border-radius:7px;background:var(--teal-soft);color:var(--teal);display:grid;place-items:center;font-size:13px;font-weight:800}
+.rule .rv{font-size:12.5px;color:var(--ink-soft);margin-top:7px;line-height:1.55}
+.rule .rv b{color:var(--ink)}
+
+/* ---------- toolbar ---------- */
+.toolbar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin-bottom:18px;
+}
+.btn{
+  font-family:var(--sans);font-weight:500;font-size:13.5px;
+  border:1px solid var(--line);background:var(--paper-2);color:var(--ink);
+  padding:9px 16px;border-radius:10px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px;
+  transition:all .16s ease;white-space:nowrap;
+}
+.btn:hover{border-color:var(--gold-soft);color:var(--gold);box-shadow:var(--shadow)}
+.btn svg{width:15px;height:15px;flex:none}
+.btn.primary{background:var(--ink);color:#F4EFE4;border-color:var(--ink)}
+.btn.primary:hover{background:#22344a;color:var(--gold-soft)}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--danger);border-color:var(--terra-soft)}
+.btn.danger:hover{background:var(--terra-soft);border-color:var(--terra)}
+.toolbar .spacer{flex:1}
+.stat-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12.5px;color:var(--muted);padding:6px 13px;
+  background:var(--paper-2);border:1px solid var(--line);border-radius:30px;
+}
+.stat-pill b{color:var(--ink);font-family:var(--display);font-weight:600}
+.stat-pill .lim{color:var(--terra)}
+
+/* ---------- volunteer list ---------- */
+.vlist{display:flex;flex-direction:column;gap:14px}
+.group{
+  background:var(--paper-2);border:1px solid var(--line);
+  border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+  transition:border-color .2s, box-shadow .2s;
+}
+.group:hover{border-color:var(--gold-soft)}
+.group.dragging{opacity:.5;border-style:dashed}
+.group-head{
+  display:flex;align-items:center;gap:14px;padding:15px 18px;
+  cursor:grab;user-select:none;background:linear-gradient(180deg,#FFFDF8,var(--paper-2));
+  border-bottom:1px solid var(--line-soft);
+}
+.group.collapsed .group-head{border-bottom:none}
+.group-head:active{cursor:grabbing}
+.gdrag{color:var(--line);display:flex;flex-direction:column;gap:2px;cursor:grab}
+.gdrag span{width:14px;height:2px;background:currentColor;border-radius:2px}
+.gnum{
+  font-family:var(--display);font-weight:800;font-size:21px;
+  width:44px;height:44px;flex:none;border-radius:12px;
+  display:grid;place-items:center;color:#fff;
+  background:linear-gradient(145deg,#27405a,#15212E);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15);
+}
+.gnum.special{background:linear-gradient(145deg,#1f6b66,#1F5E5A)}
+.gcore{flex:1;min-width:0}
+.gschool{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.gschool .code{font-family:var(--display);font-weight:600;color:var(--muted);font-size:14px}
+.gschool .name{font-family:var(--serif);font-weight:700;font-size:16.5px;color:var(--ink)}
+.ggroup-tag{display:flex;align-items:center;gap:8px;margin-top:5px;flex-wrap:wrap}
+.gtag{
+  font-size:11.5px;font-weight:500;padding:2.5px 9px;border-radius:20px;
+  background:var(--line-soft);color:var(--ink-soft);white-space:nowrap;
+}
+.gtag.plan{background:var(--teal-soft);color:var(--teal)}
+.gtag.enr{background:#F3EAD9;color:var(--gold)}
+.gtag.adjust{background:var(--sage-soft);color:var(--sage)}
+.gtag.adjust.no{background:var(--terra-soft);color:var(--terra)}
+.gtag.strat-rush{background:#F3EAD9;color:var(--gold)}
+.gtag.strat-stable{background:var(--teal-soft);color:var(--teal)}
+.gtag.strat-protect{background:var(--sage-soft);color:var(--sage)}
+.gacts{display:flex;align-items:center;gap:4px;flex:none}
+/* hide toggle switch */
+.gtoggle{
+  display:flex;align-items:center;gap:6px;flex:none;
+  padding:4px 10px;border-radius:20px;border:1px solid var(--line);
+  background:#fff;cursor:pointer;transition:all .2s;user-select:none;
+}
+.gtoggle .gt-track{
+  width:30px;height:17px;border-radius:10px;background:var(--line);
+  position:relative;transition:background .2s;
+}
+.gtoggle .gt-knob{
+  position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:transform .2s;
+}
+.gtoggle.on .gt-track{background:var(--teal)}
+.gtoggle.on .gt-knob{transform:translateX(13px)}
+.gtoggle .gt-label{font-size:11px;font-weight:500;color:var(--muted);white-space:nowrap}
+.gtoggle.on .gt-label{color:var(--teal)}
+.group.hidden-on{opacity:.4;filter:grayscale(.6)}
+.group.hidden-on .group-head{background:linear-gradient(180deg,#F0EDE5,var(--paper-2))}
+.group.hidden-on .gnum{background:linear-gradient(145deg,#9a9a9a,#7a7a7a)}
+.group.hidden-on .gschool .name{text-decoration:line-through;text-decoration-color:var(--muted)}
+.iconbtn{
+  width:32px;height:32px;border-radius:8px;border:1px solid transparent;
+  background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center;
+  transition:all .15s;
+}
+.iconbtn:hover{background:var(--line-soft);color:var(--ink);border-color:var(--line)}
+.iconbtn.updown{color:var(--muted)}
+.iconbtn.updown:hover{color:var(--teal)}
+.iconbtn svg{width:16px;height:16px}
+.iconbtn.del:hover{color:var(--danger);background:var(--terra-soft);border-color:var(--terra-soft)}
+.iconbtn:disabled{opacity:.3;cursor:not-allowed}
+.iconbtn:disabled:hover{background:transparent;color:var(--muted);border-color:transparent}
+
+/* majors area */
+.majors{padding:14px 18px 16px 62px;background:var(--paper-2)}
+.group.collapsed .majors{display:none}
+.majors-head{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;
+}
+.majors-head .mlab{font-size:12px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;font-weight:500}
+.majors-head .mlab b{color:var(--ink);font-family:var(--display);font-weight:600}
+.majors-head .mlab .full{color:var(--terra)}
+.mlist{display:flex;flex-direction:column;gap:7px}
+.major{
+  display:flex;align-items:center;gap:12px;padding:9px 13px;
+  background:#fff;border:1px solid var(--line-soft);border-radius:10px;
+  transition:border-color .15s, box-shadow .15s;
+}
+.major:hover{border-color:var(--gold-soft);box-shadow:0 2px 8px rgba(21,33,46,.05)}
+.major.dragging{opacity:.5;border-style:dashed}
+.mdrag{color:var(--line);cursor:grab;display:flex;flex-direction:column;gap:2px}
+.mdrag span{width:11px;height:2px;background:currentColor;border-radius:2px}
+.mdrag:active{cursor:grabbing}
+.mcode{
+  font-family:var(--display);font-weight:700;font-size:13px;
+  color:var(--gold);min-width:30px;text-align:center;
+  background:#FBF4E6;padding:3px 0;border-radius:6px;
+}
+.mname{flex:1;font-size:14px;color:var(--ink);min-width:0}
+.mname .note{font-size:12px;color:var(--muted);margin-left:6px}
+.menr{
+  font-size:12px;color:var(--teal);font-weight:500;white-space:nowrap;
+  background:var(--teal-soft);padding:2.5px 9px;border-radius:20px;
+}
+.menr.empty{color:var(--muted);background:var(--line-soft)}
+.menr.priority-tag{color:var(--ink-soft);background:#F0EDE5;font-size:11px}
+.menr.backup-tag{color:#fff;background:var(--muted);font-size:11px}
+.menr.backup-tag:hover{background:var(--ink-soft)}
+.major.backup{background:#FAFAF8;border-style:dashed;border-color:var(--line)}
+.major.backup:hover{border-color:var(--muted)}
+.major.backup .mcode{color:var(--muted);background:#F0EDE5}
+.major.backup .mname{color:var(--ink-soft)}
+.mlab-backup{color:var(--muted);font-weight:500;margin-left:2px}
+.majors-tip{font-size:11px;color:var(--terra);font-weight:400}
+.vd-mtable .vd-mbackup td{
+  text-align:center;font-size:11.5px;color:var(--muted);
+  background:#FAFAF8;font-style:italic;padding:6px 12px
+}
+.macts{display:flex;gap:2px;flex:none}
+.macts .iconbtn{width:28px;height:28px}
+.macts .iconbtn svg{width:14px;height:14px}
+.add-major{
+  margin-top:9px;display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--teal);cursor:pointer;padding:5px 12px;
+  border:1px dashed var(--teal-soft);border-radius:8px;background:transparent;
+  transition:all .15s;font-family:var(--sans);
+}
+.add-major:hover{background:var(--teal-soft);border-style:solid;border-color:var(--teal)}
+.add-major:disabled{opacity:.4;cursor:not-allowed}
+.add-major svg{width:14px;height:14px}
+
+/* empty state */
+.empty-state{
+  text-align:center;padding:60px 20px;border:2px dashed var(--line);
+  border-radius:var(--radius);color:var(--muted);
+}
+.empty-state .ei{font-size:46px;margin-bottom:14px;opacity:.4}
+.empty-state h3{font-family:var(--serif);font-size:18px;color:var(--ink-soft);margin-bottom:6px}
+.empty-state p{font-size:13.5px}
+
+/* ---------- modal ---------- */
+.overlay{
+  position:fixed;inset:0;background:rgba(21,33,46,.45);
+  backdrop-filter:blur(4px);z-index:50;display:none;
+  align-items:center;justify-content:center;padding:24px;
+  animation:fade .2s ease;
+}
+.overlay.show{display:flex}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.modal{
+  background:var(--paper-2);border-radius:18px;width:100%;max-width:560px;
+  max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg);
+  animation:pop .22s cubic-bezier(.2,.9,.3,1.2);border:1px solid var(--line);
+}
+@keyframes pop{from{transform:scale(.95) translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.modal.wide{max-width:780px}
+.modal-head{
+  padding:20px 24px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;
+  background:var(--paper-2);z-index:2;border-radius:18px 18px 0 0;
+}
+.modal-head h3{font-family:var(--serif);font-size:18px;font-weight:700}
+.modal-body{padding:22px 24px}
+.modal-foot{
+  padding:16px 24px;border-top:1px solid var(--line);display:flex;gap:10px;
+  justify-content:flex-end;position:sticky;bottom:0;background:var(--paper-2);
+  border-radius:0 0 18px 18px;
+}
+.field{margin-bottom:16px}
+.field.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.field label{display:block;font-size:12.5px;font-weight:500;color:var(--ink-soft);margin-bottom:7px;letter-spacing:.3px}
+.field label .req{color:var(--terra)}
+.field input,.field select,.field textarea{
+  width:100%;font-family:var(--sans);font-size:14px;color:var(--ink);
+  background:#fff;border:1px solid var(--line);border-radius:9px;
+  padding:9px 12px;transition:border-color .15s, box-shadow .15s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none;border-color:var(--gold-soft);box-shadow:0 0 0 3px rgba(168,124,47,.12);
+}
+.field .hint{font-size:11.5px;color:var(--muted);margin-top:5px}
+.field textarea{resize:vertical;min-height:90px;font-family:"SFMono-Regular",Consolas,monospace;font-size:12.5px;line-height:1.6}
+.seg{display:flex;gap:6px}
+.seg label{
+  flex:1;text-align:center;padding:8px 6px;border:1px solid var(--line);
+  border-radius:9px;cursor:pointer;font-size:13px;color:var(--ink-soft);
+  transition:all .15s;background:#fff;font-weight:500;
+}
+.seg input{display:none}
+.seg input:checked + span{color:var(--gold);font-weight:600}
+.seg label:has(input:checked){border-color:var(--gold);background:#FBF4E6;color:var(--gold)}
+.seg label:hover{border-color:var(--gold-soft)}
+
+/* format guide */
+.fmt-intro{font-size:13.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:16px}
+.fmt-intro b{color:var(--ink)}
+.fmt-tabs{display:flex;gap:6px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+.fmt-tabs button{
+  font-family:var(--sans);font-size:13px;font-weight:500;padding:8px 16px;
+  border:none;background:transparent;color:var(--muted);cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+}
+.fmt-tabs button.active{color:var(--gold);border-bottom-color:var(--gold)}
+.code-block{
+  background:#15212E;color:#D7E8E5;border-radius:10px;padding:16px 18px;
+  font-family:"SFMono-Regular",Consolas,monospace;font-size:12px;line-height:1.7;
+  overflow-x:auto;white-space:pre;position:relative;
+}
+.code-block .k{color:#E0C07A}
+.code-block .s{color:#9DCFA6}
+.code-block .c{color:#5A7080;font-style:italic}
+.code-block .n{color:#E89B7A}
+.copy-btn{
+  position:absolute;top:10px;right:10px;font-size:11px;color:#D7E8E5;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+  padding:4px 10px;border-radius:6px;cursor:pointer;
+}
+.copy-btn:hover{background:rgba(255,255,255,.2)}
+.fmt-field-tbl{width:100%;font-size:12.5px;border-collapse:collapse;margin-top:6px}
+.fmt-field-tbl th,.fmt-field-tbl td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line-soft)}
+.fmt-field-tbl th{color:var(--muted);font-weight:500;font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+.fmt-field-tbl td code{font-family:"SFMono-Regular",Consolas,monospace;color:var(--gold);font-size:11.5px}
+.fmt-field-tbl td .opt{color:var(--muted);font-size:11px}
+
+/* toast */
+.toast-wrap{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center}
+.toast{
+  background:var(--ink);color:#F4EFE4;padding:11px 20px;border-radius:30px;
+  font-size:13.5px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:9px;
+  animation:slideUp .3s ease;max-width:90vw;
+}
+.toast.ok{background:var(--sage)}
+.toast.err{background:var(--danger)}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+
+/* footer note */
+.foot-note{
+  margin-top:40px;padding-top:22px;border-top:1px solid var(--line);
+  font-size:12px;color:var(--muted);line-height:1.7;text-align:center;
+}
+.foot-note b{color:var(--ink-soft)}
+
+/* responsive */
+@media(max-width:760px){
+  .hero-grid{grid-template-columns:1fr;gap:20px}
+  .hero-title{font-size:32px}
+  .rules{grid-template-columns:1fr 1fr}
+  .scorecard{flex-wrap:wrap}
+  .majors{padding-left:18px}
+  .modal{max-height:92vh}
+  .field.row2,.field.row3{grid-template-columns:1fr}
+}
+.sortable-ghost{opacity:.3}
+.sortable-chosen{box-shadow:0 0 0 2px var(--gold-soft)}
+
+/* ---------- config panel ---------- */
+.cfg-wrap{padding:0 18px 14px 62px}
+.cfg-toggle{
+  display:flex;align-items:center;gap:7px;width:100%;
+  padding:9px 0 0;margin-top:2px;border:none;background:transparent;
+  cursor:pointer;font-family:var(--sans);font-size:12.5px;color:var(--teal);
+  font-weight:500;
+}
+.cfg-toggle svg{width:14px;height:14px;transition:transform .2s}
+.group.cfg-open .cfg-toggle svg{transform:rotate(90deg)}
+.cfg-toggle .cfg-summary{color:var(--muted);font-weight:400;margin-left:4px;font-size:11.5px}
+.cfg-toggle .cfg-summary b{color:var(--ink-soft)}
+.cfg-panel{
+  display:none;margin-top:11px;padding:14px 16px;
+  background:linear-gradient(180deg,#FFFDF8,#F8F4EB);
+  border:1px solid var(--line-soft);border-radius:11px;
+}
+.group.cfg-open .cfg-panel{display:block;animation:cfgSlide .22s ease}
+@keyframes cfgSlide{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px 18px}
+.cfg-item{display:flex;flex-direction:column;gap:3px}
+.cfg-item.full{grid-column:1/-1}
+.cfg-label{
+  font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;
+  color:var(--muted);font-weight:500;display:flex;align-items:center;gap:5px;
+}
+.cfg-label svg{width:12px;height:12px;opacity:.7}
+.cfg-value{font-size:13px;color:var(--ink);line-height:1.5;font-weight:500}
+.cfg-value.empty{color:var(--muted);font-weight:400;font-style:italic}
+.cfg-value.note{color:var(--ink-soft);font-weight:400;background:#FFF8E8;padding:7px 10px;border-radius:7px;border:1px solid #F0E6CC;font-size:12.5px;line-height:1.6}
+
+/* rank analysis badge */
+.rank-analysis{
+  display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:9px;
+  font-size:12.5px;margin-top:11px;border:1px solid;
+}
+.rank-analysis.rush{background:#FBF4E6;border-color:#E8D9B8;color:var(--gold)}
+.rank-analysis.stable{background:var(--teal-soft);border-color:#BDD9D5;color:var(--teal)}
+.rank-analysis.protect{background:var(--sage-soft);border-color:#C2D9BE;color:var(--sage)}
+.rank-analysis.warn{background:var(--terra-soft);border-color:#DDBFA8;color:var(--terra)}
+.rank-analysis svg{width:15px;height:15px;flex:none}
+.rank-analysis b{font-family:var(--display);font-weight:600}
+.rank-analysis .ra-gap{margin-left:auto;font-size:11.5px;opacity:.85}
+
+/* history table in config panel (edit mode) */
+.cfg-hist-tbl{width:100%;border-collapse:collapse;margin-top:4px;font-size:12px}
+.cfg-hist-tbl th{padding:5px 8px;background:#F5F0E5;color:var(--muted);font-weight:500;font-size:10.5px;letter-spacing:.3px;border-bottom:1px solid var(--line);text-align:left}
+.cfg-hist-tbl td{padding:5px 8px;border-bottom:1px solid var(--line-soft);color:var(--ink)}
+.cfg-hist-tbl tr:last-child td{border-bottom:none}
+.cfg-hist-tbl .h-year{font-family:var(--display);font-weight:600;color:var(--gold);width:60px}
+.cfg-hist-tbl .h-rank{font-weight:500}
+.cfg-hist-tbl .h-score{color:var(--teal)}
+
+/* history input table in modal */
+.hist-input-tbl{width:100%;border-collapse:collapse;font-size:13px;margin-top:2px}
+.hist-input-tbl th{padding:4px 6px;font-size:11px;color:var(--muted);font-weight:500;text-align:left;border-bottom:1px solid var(--line)}
+.hist-input-tbl td{padding:4px 6px}
+.hist-input-tbl input{width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:7px;font-size:13px;background:#FBFAF6}
+.hist-input-tbl input:focus{outline:none;border-color:var(--gold);background:#fff}
+.hist-input-tbl .hi-year{width:80px}
+
+/* smart paste tools */
+.hist-tools{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center}
+.hist-tool-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink-soft);font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;text-decoration:none}
+.hist-tool-btn:hover{border-color:var(--gold);color:var(--ink);background:#FFFDF5}
+.hist-tool-btn svg{width:14px;height:14px}
+.hist-tool-btn.primary{background:var(--teal-soft);border-color:var(--teal);color:var(--teal)}
+.hist-tool-btn.primary:hover{background:#D0F0EC}
+.hist-paste-area{margin-top:4px;padding:12px;background:#FBFAF6;border:1px dashed var(--line);border-radius:10px}
+.hist-paste-area textarea{width:100%;min-height:90px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:12px;font-family:inherit;resize:vertical;background:#fff;line-height:1.5}
+.hist-paste-area textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,169,97,.1)}
+.hist-paste-actions{display:flex;gap:8px;margin-top:8px;align-items:center}
+.hist-paste-actions .btn.sm{padding:5px 14px;font-size:12px;border-radius:8px}
+.hist-parse-hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
+.hist-parse-hint.ok{color:var(--teal)}
+.hist-parse-hint.err{color:#c44}
+
+/* view mode history table */
+.vd-hist-tbl{width:100%;border-collapse:collapse;margin-top:0;font-size:12px}
+.vd-hist-tbl th{padding:6px 10px;background:#F5F0E5;color:var(--muted);font-weight:500;font-size:10px;letter-spacing:.4px;text-align:left;border-bottom:1px solid var(--line)}
+.vd-hist-tbl td{padding:6px 10px;border-bottom:1px solid var(--line-soft);color:var(--ink)}
+.vd-hist-tbl tr:last-child td{border-bottom:none}
+.vd-hist-tbl .h-year{font-family:var(--display);font-weight:700;color:var(--gold);width:60px}
+.vd-hist-tbl .h-rank{font-weight:500}
+.vd-hist-tbl .h-score{color:var(--teal)}
+/* hidden groups shown grayed in view mode, not counted in sequence */
+
+/* collapsible section in modal */
+.fieldset-collapsible{
+  border:1px solid var(--line);border-radius:11px;overflow:hidden;margin-top:4px;
+}
+.fieldset-head{
+  display:flex;align-items:center;gap:9px;padding:11px 14px;cursor:pointer;
+  background:var(--paper-2);user-select:none;transition:background .15s;
+}
+.fieldset-head:hover{background:var(--line-soft)}
+.fieldset-head .fh-chev{width:14px;height:14px;color:var(--muted);transition:transform .2s;flex:none}
+.fieldset-collapsible.open .fh-chev{transform:rotate(90deg)}
+.fieldset-head .fh-title{font-size:13px;font-weight:600;color:var(--ink-soft);flex:1}
+.fieldset-head .fh-hint{font-size:11.5px;color:var(--muted)}
+.fieldset-body{display:none;padding:14px}
+.fieldset-collapsible.open .fieldset-body{display:block}
+.fieldset-collapsible.open .fieldset-head{border-bottom:1px solid var(--line)}
+
+@media(max-width:760px){
+  .cfg-grid{grid-template-columns:1fr}
+  .cfg-wrap{padding:0 18px 14px}
+  .cfg-secondary{grid-template-columns:1fr}
+  .hist-input-tbl input{font-size:12px;padding:5px 6px}
+}
+
+/* ---------- view mode ---------- */
+body.view-mode .wrap{max-width:920px}
+body.view-mode .topbar,body.view-mode .rules,body.view-mode .toolbar,
+body.view-mode .vlist,body.view-mode .foot-note{display:none}
+body.view-mode{background:#fff}
+
+.view-toolbar{
+  display:none;align-items:center;gap:10px;flex-wrap:wrap;
+  padding:16px 0 14px;border-bottom:2px solid var(--ink);margin-bottom:28px;
+}
+body.view-mode .view-toolbar{display:flex}
+.view-toolbar .vt-title{font-family:var(--serif);font-weight:700;font-size:16px;flex:1}
+.view-toolbar .btn{font-size:13px;padding:8px 14px}
+
+.view-doc{
+  display:none;background:#fff;padding:8px 0 40px;
+}
+body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
+@keyframes viewFade{from{opacity:0}to{opacity:1}}
+
+/* ---------- print: browser native PDF ---------- */
+@media print{
+  body{background:#fff !important;font-size:11pt}
+  body *{visibility:hidden}
+  body.view-mode .view-doc,
+  body.view-mode .view-doc *{visibility:visible}
+  .view-doc{position:absolute;left:0;top:0;width:100%;padding:0;margin:0;display:block !important;animation:none}
+  .view-toolbar,.topbar,.rules,.toolbar,.vlist,.foot-note{display:none !important}
+  .wrap{max-width:none;margin:0;padding:0}
+  /* page break between groups */
+  .vd-group{page-break-inside:avoid;break-inside:avoid}
+  .vd-header{page-break-after:avoid;break-after:avoid}
+  .vd-footer{page-break-before:avoid;break-before:avoid;margin-top:20px}
+  /* colors: keep subtle but print-friendly */
+  .vd-gnum,.vd-seal{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  @page{margin:12mm 10mm}
+}
+
+/* document header */
+.vd-header{text-align:center;padding-bottom:24px;border-bottom:3px double var(--ink);margin-bottom:28px}
+.vd-header .vd-seal{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:56px;height:56px;border:2px solid var(--ink);border-radius:50%;
+  font-family:var(--serif);font-weight:900;font-size:22px;color:var(--ink);
+  margin-bottom:12px;
+}
+.vd-header h1{font-family:var(--serif);font-weight:900;font-size:28px;letter-spacing:2px;color:var(--ink)}
+.vd-header .vd-sub{font-size:13px;color:var(--muted);margin-top:6px;letter-spacing:1px}
+.vd-header .vd-meta{
+  display:flex;justify-content:center;gap:0;margin-top:16px;
+  border:1px solid var(--line);border-radius:8px;overflow:hidden;
+}
+.vd-header .vd-meta-item{
+  padding:10px 24px;text-align:center;border-right:1px solid var(--line);
+}
+.vd-header .vd-meta-item:last-child{border-right:none}
+.vd-header .vd-meta-num{font-family:var(--display);font-weight:800;font-size:24px;color:var(--ink);line-height:1}
+.vd-header .vd-meta-num.gold{color:var(--gold)}
+.vd-header .vd-meta-lab{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:5px}
+
+/* group entry in view mode */
+.vd-group{margin-bottom:22px;break-inside:avoid;page-break-inside:avoid}
+.vd-group-head{
+  display:flex;align-items:stretch;border:1.5px solid var(--ink);
+  border-radius:6px;overflow:hidden;
+}
+.vd-gnum{
+  display:flex;align-items:center;justify-content:center;
+  width:48px;flex:none;background:var(--ink);color:#fff;
+  font-family:var(--display);font-weight:800;font-size:20px;
+}
+.vd-gnum.special{background:var(--teal)}
+.vd-gnum.hidden{background:var(--line);color:var(--muted)}
+.vd-group-hidden{opacity:.55}
+.vd-group-hidden .vd-group-head{border-color:var(--line);border-style:dashed}
+.vd-group-hidden .vd-ginfo .vd-gschool .name{text-decoration:line-through;text-decoration-color:var(--muted)}
+.vd-gtag-hidden{background:#E8E4DC;color:var(--muted)!important;font-weight:500}
+.vd-ginfo{flex:1;padding:10px 16px}
+.vd-ginfo .vd-gschool{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.vd-ginfo .vd-gschool .code{font-family:var(--display);font-weight:600;color:var(--muted);font-size:14px}
+.vd-ginfo .vd-gschool .name{font-family:var(--serif);font-weight:700;font-size:16px;color:var(--ink)}
+.vd-ginfo .vd-gschool .gcode{font-family:var(--display);font-weight:600;color:var(--gold);font-size:14px}
+.vd-ginfo .vd-gtags{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.vd-ginfo .vd-gtag{font-size:11px;padding:2px 8px;border-radius:4px;background:var(--line-soft);color:var(--ink-soft);font-weight:500}
+.vd-ginfo .vd-gtag.plan{background:var(--teal-soft);color:var(--teal)}
+.vd-ginfo .vd-gtag.enr{background:#F3EAD9;color:var(--gold)}
+.vd-ginfo .vd-gtag.strat-rush{background:#F3EAD9;color:var(--gold)}
+.vd-ginfo .vd-gtag.strat-stable{background:var(--teal-soft);color:var(--teal)}
+.vd-ginfo .vd-gtag.strat-protect{background:var(--sage-soft);color:var(--sage)}
+.vd-ginfo .vd-gtag.adjust{background:var(--sage-soft);color:var(--sage)}
+.vd-ginfo .vd-gtag.adjust-no{background:var(--terra-soft);color:var(--terra)}
+.vd-gra{
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  padding:8px 14px;flex:none;border-left:1.5px solid var(--ink);
+  min-width:100px;
+}
+.vd-gra .vd-gra-label{font-size:10px;color:var(--muted);letter-spacing:.5px}
+.vd-gra .vd-gra-val{font-family:var(--display);font-weight:700;font-size:14px;margin-top:2px}
+.vd-gra.rush{background:#FBF4E6}
+.vd-gra.stable{background:var(--teal-soft)}
+.vd-gra.protect{background:var(--sage-soft)}
+.vd-gra.warn{background:var(--terra-soft)}
+.vd-gra .vd-gra-val.rush{color:var(--gold)}
+.vd-gra .vd-gra-val.stable{color:var(--teal)}
+.vd-gra .vd-gra-val.protect{color:var(--sage)}
+.vd-gra .vd-gra-val.warn{color:var(--terra)}
+
+/* major table in view mode */
+.vd-mtable{width:100%;border-collapse:collapse;margin-top:0;border:1px solid var(--line);border-top:none;border-radius:0 0 6px 6px;overflow:hidden}
+.vd-mtable th{
+  background:#F8F5EE;font-size:10.5px;font-weight:600;color:var(--muted);
+  letter-spacing:.5px;text-transform:uppercase;padding:8px 12px;
+  border-bottom:1px solid var(--line);text-align:left;
+}
+.vd-mtable td{padding:9px 12px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--line-soft)}
+.vd-mtable tr:last-child td{border-bottom:none}
+.vd-mtable .vd-mcode{font-family:var(--display);font-weight:700;color:var(--gold);width:50px;text-align:center}
+.vd-mtable .vd-mname{font-weight:500}
+.vd-mtable .vd-mhist{font-size:11.5px;color:var(--teal);line-height:1.5;max-width:240px}
+.vd-mtable .vd-mhist.empty{color:var(--muted);font-weight:400}
+.vd-mtable .vd-mnote{margin-top:3px;font-size:11.5px;color:var(--terra);font-weight:400;line-height:1.4;padding-left:6px;border-left:2px solid var(--terra)}
+.vd-mtable .vd-menr{width:100px;text-align:center;color:var(--teal);font-weight:500}
+.vd-mtable .vd-menr.empty{color:var(--muted);font-weight:400}
+
+/* config row in view mode */
+.vd-cfg{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--line);border:1px solid var(--line);border-top:none;
+}
+.vd-cfg-item{background:#FAF7F0;padding:8px 12px}
+.vd-cfg-item.full{grid-column:1/-1}
+.vd-cfg-label{font-size:10px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;font-weight:500}
+.vd-cfg-value{font-size:12.5px;color:var(--ink);margin-top:3px;font-weight:500}
+.vd-cfg-value.empty{color:var(--muted);font-style:italic;font-weight:400}
+.vd-cfg-value.note{color:var(--ink-soft);font-weight:400}
+
+/* footer */
+.vd-footer{
+  margin-top:32px;padding-top:18px;border-top:2px solid var(--ink);
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:11px;color:var(--muted);
+}
+.vd-footer .vd-gen{font-family:"SFMono-Regular",monospace}
+
+@media(max-width:760px){
+  .vd-cfg{grid-template-columns:1fr 1fr}
+  .vd-group-head{flex-wrap:wrap}
+  .vd-gra{border-left:none;border-top:1.5px solid var(--ink);width:100%;flex-direction:row;justify-content:space-between}
+}
+
+/* ---------- responsive: 手机端 540px ---------- */
+@media(max-width:540px){
+  .hero-title{font-size:26px}
+  .hero-sub{font-size:13px;line-height:1.5}
+  .scorecard{gap:6px;padding:12px 14px}
+  .scorecard .sc-num{font-size:24px}
+  .scorecard .sc-num.gold{font-size:24px}
+  .scorecard .sc-lab{font-size:10px;letter-spacing:1px}
+  .scorecard .sc-item{min-width:60px}
+  .rules{grid-template-columns:1fr}
+  .rule{padding:12px 14px}
+  .toolbar{gap:6px}
+  .toolbar .btn{font-size:12px;padding:7px 11px;gap:5px}
+  .toolbar .btn svg{width:13px;height:13px}
+  .stat-pill{font-size:11px;padding:5px 10px;width:100%;justify-content:center}
+  .toolbar .spacer{display:none}
+  /* group card — 手机端头部紧凑布局 */
+  .group-head{flex-wrap:wrap;gap:6px;padding:10px 12px;row-gap:4px}
+  .gdrag{display:none}
+  .gnum{width:32px;height:32px;font-size:16px;border-radius:8px;flex:none}
+  .gcore{flex:1 1 calc(100% - 44px);min-width:0}
+  .gschool{flex-wrap:wrap;gap:4px 6px;align-items:baseline}
+  .gschool .code{font-size:11px}
+  .gschool .name{font-size:13px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .gschool .name + .code + .name{font-size:12px}
+  .ggroup-tag{gap:3px;margin-top:3px}
+  .gtag{font-size:10px;padding:2px 6px}
+  /* 显示/隐藏开关缩小 */
+  .gtoggle{padding:2px 6px;gap:3px;flex:none;order:10}
+  .gtoggle .gt-label{font-size:9px}
+  .gtoggle .gt-track{width:22px;height:13px}
+  .gtoggle .gt-knob{width:9px;height:9px;top:1px;left:1px}
+  .gtoggle.on .gt-knob{transform:translateX(9px)}
+  /* 操作按钮独占一行 */
+  .gacts{width:100%;flex-wrap:wrap;justify-content:flex-end;gap:1px;padding-top:2px;border-top:1px solid var(--line-soft)}
+  .gacts .iconbtn{width:30px;height:30px}
+  .gacts .iconbtn svg{width:14px;height:14px}
+  .majors{padding:10px 12px 14px}
+  .majors-head{flex-wrap:wrap;gap:4px}
+  .major{flex-wrap:wrap;gap:6px;padding:8px 10px}
+  .mcode{font-size:12px;min-width:26px}
+  .mname{font-size:13px;flex:1 1 100%}
+  .menr{font-size:11px;padding:2px 7px}
+  .mdrag{display:none}
+  .macts{width:100%;justify-content:flex-end}
+  .macts .iconbtn{width:26px;height:26px}
+  .macts .iconbtn svg{width:13px;height:13px}
+  .add-major{font-size:12px;padding:5px 10px}
+  .cfg-wrap{padding:0 10px 12px}
+  .cfg-grid{grid-template-columns:1fr}
+  .cfg-toggle{font-size:11.5px}
+  .cfg-panel{padding:10px 12px}
+  .cfg-hist-tbl{font-size:11px}
+  .cfg-hist-tbl th,.cfg-hist-tbl td{padding:4px 6px}
+  .overlay{padding:8px;align-items:flex-end}
+  .modal{max-width:100%;margin:0;max-height:94vh;border-radius:16px 16px 0 0}
+  .modal.wide{max-width:100%}
+  .modal-head{padding:14px 16px}
+  .modal-head h3{font-size:16px}
+  .modal-body{padding:14px 16px}
+  .modal-foot{padding:12px 16px;flex-wrap:wrap;gap:8px}
+  .modal-foot .btn{flex:1;justify-content:center}
+  .field{margin-bottom:12px}
+  .field.row2,.field.row3{grid-template-columns:1fr}
+  .fieldset-body{padding:10px 12px}
+  .hist-input-tbl{font-size:11px}
+  .hist-input-tbl input{font-size:11px;padding:5px 6px}
+  .hist-tools{gap:6px}
+  .hist-tool-btn{font-size:11px;padding:4px 8px}
+  .fmt-tabs{flex-wrap:wrap}
+  .fmt-tabs button{font-size:12px;padding:6px 10px}
+  .code-block{font-size:10.5px;padding:12px}
+  .fmt-field-tbl{font-size:11px}
+  .topbar{flex-wrap:wrap;gap:8px;padding:14px 0 10px}
+  .brand-mark{width:34px;height:34px;font-size:18px;border-radius:9px}
+  .brand-tx h1{font-size:15px}
+  .brand-tx p{font-size:11px}
+  .topbar-meta{font-size:11px;gap:8px}
+
+  /* ---- 查看模式手机端 ---- */
+  body.view-mode .wrap{padding:0 10px 60px}
+  .view-toolbar{flex-wrap:wrap;gap:6px;padding:10px 0}
+  .view-toolbar .vt-title{font-size:14px;flex:1 1 100%}
+  .view-toolbar .btn{font-size:12px;padding:6px 10px}
+  .vd-header{padding-bottom:16px;margin-bottom:18px}
+  .vd-header .vd-seal{width:42px;height:42px;font-size:18px;margin-bottom:8px}
+  .vd-header h1{font-size:18px;letter-spacing:1px}
+  .vd-header .vd-sub{font-size:11px}
+  .vd-header .vd-meta{flex-wrap:wrap;border-radius:6px}
+  .vd-header .vd-meta-item{padding:8px 10px;border-right:none;border-bottom:1px solid var(--line);flex:1 1 auto;min-width:33%}
+  .vd-header .vd-meta-item:last-child{border-bottom:none}
+  .vd-header .vd-meta-num{font-size:20px !important}
+  .vd-header .vd-meta-lab{font-size:10px;margin-top:3px}
+  .vd-group{margin-bottom:18px}
+  .vd-group-head{flex-wrap:wrap}
+  .vd-gnum{width:36px;font-size:16px}
+  .vd-ginfo{padding:8px 10px}
+  .vd-ginfo .vd-gschool{flex-wrap:wrap;gap:6px}
+  .vd-ginfo .vd-gschool .name{font-size:14px}
+  .vd-ginfo .vd-gschool .code,.vd-ginfo .vd-gschool .gcode{font-size:12px}
+  .vd-ginfo .vd-gtags{gap:4px}
+  .vd-ginfo .vd-gtag{font-size:10px;padding:2px 6px}
+  .vd-gra{width:100%;border-left:none;border-top:1.5px solid var(--ink);flex-direction:row;align-items:center;justify-content:space-between;padding:8px 12px;gap:8px}
+  .vd-gra .vd-gra-label{font-size:9px}
+  .vd-gra .vd-gra-val{font-size:13px}
+  .vd-mtable-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -1px}
+  .vd-mtable{min-width:520px;font-size:12px}
+  .vd-mtable th{font-size:9.5px;padding:6px 8px}
+  .vd-mtable td{padding:7px 8px;font-size:12px}
+  .vd-mtable .vd-mcode{width:40px;font-size:12px}
+  .vd-mtable .vd-mname{font-size:12px}
+  .vd-mtable .vd-mhist{font-size:10.5px;max-width:180px}
+  .vd-mtable .vd-menr{width:70px;font-size:11px}
+  .vd-cfg{grid-template-columns:1fr}
+  .vd-cfg-item{padding:6px 10px}
+  .vd-cfg-label{font-size:9px}
+  .vd-cfg-value{font-size:11.5px}
+  .vd-hist-tbl{font-size:11px}
+  .vd-hist-tbl th,.vd-hist-tbl td{padding:4px 6px}
+  .vd-footer{flex-direction:column;gap:6px;text-align:center;font-size:10px;margin-top:24px;padding-top:14px}
+}
+
+/* ---------- 登录遮罩 ---------- */
+.login-overlay{
+  position:fixed;inset:0;background:var(--paper);
+  background-image:
+    radial-gradient(circle at 15% 10%, rgba(168,124,47,.05), transparent 35%),
+    radial-gradient(circle at 85% 90%, rgba(31,94,90,.05), transparent 40%);
+  z-index:400;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;padding:24px;
+}
+.login-overlay.fade-out{
+  opacity:0;pointer-events:none;transition:opacity .4s ease;
+}
+.login-card{
+  background:var(--paper-2);border:1px solid var(--line);
+  border-radius:18px;box-shadow:var(--shadow-lg);
+  padding:36px 28px;max-width:380px;width:100%;text-align:center;
+}
+.login-card .login-icon{
+  width:60px;height:60px;border-radius:14px;
+  background:linear-gradient(145deg,#15212E,#27405a);
+  display:grid;place-items:center;margin:0 auto 18px;
+  color:var(--gold-soft);font-family:var(--display);
+  font-weight:800;font-size:26px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+}
+.login-card h2{
+  font-family:var(--serif);font-weight:700;font-size:20px;
+  margin-bottom:6px;color:var(--ink);
+}
+.login-card .login-desc{
+  font-size:13px;color:var(--muted);margin-bottom:22px;line-height:1.5;
+}
+.login-card .login-field{
+  display:flex;gap:0;margin-bottom:10px;
+}
+.login-card .login-field input{
+  flex:1;padding:11px 14px;border:1px solid var(--line);
+  border-radius:10px 0 0 10px;font-size:15px;
+  font-family:var(--sans);background:#fff;color:var(--ink);
+}
+.login-card .login-field input:focus{
+  outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(168,124,47,.08);
+}
+.login-card .login-field button{
+  padding:11px 20px;background:var(--ink);color:#F4EFE4;
+  border:none;border-radius:0 10px 10px 0;font-family:var(--sans);
+  font-size:14px;font-weight:600;cursor:pointer;
+  transition:background .15s;white-space:nowrap;
+}
+.login-card .login-field button:hover{background:#22344a}
+.login-card .login-err{
+  color:var(--danger);font-size:12.5px;min-height:20px;
+  line-height:20px;text-align:left;
+}
+
+/* ---------- 同步状态指示 ---------- */
+.sync-dot{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)}
+.sync-dot .sd-circle{width:7px;height:7px;border-radius:50%;flex:none}
+.sync-dot .sd-circle.online{background:var(--sage);box-shadow:0 0 0 3px var(--sage-soft)}
+.sync-dot .sd-circle.offline{background:var(--terra);box-shadow:0 0 0 3px var(--terra-soft)}
+.sync-dot .sd-circle.syncing{background:var(--gold);box-shadow:0 0 0 3px #F3EAD9;animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">志</div>
+      <div class="brand-tx">
+        <h1>河南新高考志愿草表</h1>
+        <p>Physics · 2026 Volunteer Draft</p>
+      </div>
+    </div>
+    <div class="topbar-meta">
+      <span class="sync-dot" id="syncDot"><span class="sd-circle online"></span><span id="syncLabel">已连接服务器</span></span>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <h2 class="hero-title">物理类志愿填报<br><em>冲 · 稳 · 保</em> 三段编排</h2>
+        <p class="hero-sub">依据河南省 2026 年普通本科批规则：平行志愿，最多 <b>48 个院校专业组</b>，每组内设 <b>6 个专业</b>及是否服从调剂。投档原则为"分数优先、遵循志愿、一轮投档"——<b>1—48 号顺序直接决定录取结果</b>，请慎重排序。</p>
+      </div>
+      <div class="scorecard">
+        <div class="sc-item"><div class="sc-num gold">657</div><div class="sc-lab">高考分数</div></div>
+        <div class="sc-div"></div>
+        <div class="sc-item"><div class="sc-num">3471</div><div class="sc-lab">全省位次</div></div>
+        <div class="sc-div"></div>
+        <div class="sc-item"><div class="sc-num" style="font-size:22px">物理</div><div class="sc-lab">首选科目</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RULES STRIP -->
+  <div class="rules">
+    <div class="rule">
+      <div class="rk"><span class="ri">①</span> 志愿单位</div>
+      <div class="rv">1 个院校专业组 = 1 个志愿，可填 <b>1—48 个</b>。选择的是"学校+专业组"。</div>
+    </div>
+    <div class="rule">
+      <div class="rk"><span class="ri">②</span> 组内专业</div>
+      <div class="rv">每个专业组内设 <b>6 个专业</b>，并勾选是否服从调剂，调剂<b>仅限组内</b>。</div>
+    </div>
+    <div class="rule">
+      <div class="rk"><span class="ri">③</span> 投档原则</div>
+      <div class="rv">分数优先、遵循志愿、<b>一轮投档</b>。投进第一所有计划余额组即生效。</div>
+    </div>
+    <div class="rule">
+      <div class="rk"><span class="ri">④</span> 排序策略</div>
+      <div class="rv">前段"冲"、中段"稳"、后段"保"，保底位次建议低 <b>1 万名</b>以上。</div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <button class="btn primary" onclick="openGroupModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      新增志愿组
+    </button>
+    <button class="btn" onclick="openImportModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+      导入
+    </button>
+    <button class="btn" onclick="exportData()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      导出
+    </button>
+    <button class="btn ghost" onclick="openFormatModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      导入格式说明
+    </button>
+    <button class="btn" onclick="toggleViewMode()" id="btnViewMode">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      查看模式
+    </button>
+    <div class="spacer"></div>
+    <span class="stat-pill">已填 <b id="cntGroups">0</b> 个专业组（显示 <b id="cntVisible">0</b> · 隐藏 <b id="cntHidden">0</b>）</span>
+    <span class="stat-pill">共 <b id="cntMajors">0</b> 个专业 · 上限 <span class="lim">48组×6</span></span>
+  </div>
+
+  <!-- VOLUNTEER LIST -->
+  <div class="vlist" id="vlist"></div>
+
+  <!-- VIEW MODE -->
+  <div class="view-toolbar" id="viewToolbar">
+    <span class="vt-title">查看模式 · 只读</span>
+    <button class="btn" onclick="exportImage()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+      导出图片
+    </button>
+    <button class="btn" onclick="exportPDF()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      打印 / 导出PDF
+    </button>
+    <button class="btn ghost" onclick="toggleViewMode()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 21V9"/></svg>
+      返回编辑
+    </button>
+  </div>
+  <div class="view-doc" id="viewDoc"></div>
+
+  <div class="foot-note">
+    本表为<b>志愿草表</b>，用于模拟编排与排序练习，正式填报请登录「河南省普通高校招生考生服务平台」(<b>pzwb.haeea.cn</b>)。<br>
+    规则依据：河南省 2026 年普通高校招生工作规定。投档顺序决定录取，请反复调整 1—48 号顺序。
+  </div>
+</div>
+
+<!-- ========== GROUP MODAL ========== -->
+<div class="overlay" id="groupOverlay" onclick="if(event.target===this)closeOverlay('groupOverlay')">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="groupModalTitle">新增志愿组</h3>
+      <button class="iconbtn" onclick="closeOverlay('groupOverlay')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="g_editId">
+      <input type="hidden" id="g_cloneFrom">
+      <div class="field row2">
+        <div>
+          <label>院校代码 <span class="req">*</span></label>
+          <input type="text" id="g_schoolCode" placeholder="如 1485">
+        </div>
+        <div>
+          <label>院校名称 <span class="req">*</span></label>
+          <input type="text" id="g_schoolName" placeholder="如 北京航空航天大学">
+        </div>
+      </div>
+      <div class="field row2">
+        <div>
+          <label>专业组代码 <span class="req">*</span></label>
+          <input type="text" id="g_groupCode" placeholder="如 101 / G01 / 301">
+        </div>
+        <div>
+          <label>专业组名称</label>
+          <input type="text" id="g_groupName" placeholder="如 普通组 / 国家专项计划组">
+        </div>
+      </div>
+      <div class="field row3">
+        <div>
+          <label>计划类型</label>
+          <select id="g_planType">
+            <option value="普通组">普通组</option>
+            <option value="国家专项计划">国家专项计划</option>
+            <option value="高校专项计划">高校专项计划</option>
+            <option value="地方专项计划">地方专项计划</option>
+            <option value="中外合作办学">中外合作办学</option>
+            <option value="定向就业">定向就业</option>
+            <option value="预科班">预科班</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+        <div>
+          <label>组招生人数</label>
+          <input type="text" id="g_enrollment" placeholder="如 30（选填）">
+        </div>
+        <div>
+          <label>冲稳保策略</label>
+          <select id="g_strategy">
+            <option value="">—</option>
+            <option value="冲">冲</option>
+            <option value="稳">稳</option>
+            <option value="保">保</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>是否服从专业调剂</label>
+        <div class="seg">
+          <label><input type="radio" name="g_adjust" value="true" checked><span>服从调剂</span></label>
+          <label><input type="radio" name="g_adjust" value="false"><span>不服从</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label>显示 / 隐藏</label>
+        <div class="seg">
+          <label><input type="radio" name="g_hidden" value="false" checked><span>显示</span></label>
+          <label><input type="radio" name="g_hidden" value="true"><span>隐藏</span></label>
+        </div>
+        <div class="hint">隐藏后在查看模式中不显示该组，方便草稿阶段暂时搁置</div>
+      </div>
+      <div class="fieldset-collapsible" id="cfgFieldset">
+        <div class="fieldset-head" onclick="document.getElementById('cfgFieldset').classList.toggle('open')">
+          <svg class="fh-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          <span class="fh-title">更多配置（选填）</span>
+          <span class="fh-hint">近三年录取参考 · 备注</span>
+        </div>
+        <div class="fieldset-body">
+          <div class="field">
+            <label>近三年录取参考</label>
+            <div class="hist-tools">
+              <button type="button" class="hist-tool-btn primary" onclick="toggleHistPaste()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                智能粘贴
+              </button>
+              <button type="button" class="hist-tool-btn" onclick="openScoreQuery()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                查询录取数据
+              </button>
+            </div>
+            <div class="hist-paste-area" id="histPasteArea" style="display:none">
+              <textarea id="histPasteText" placeholder="从阳光高考 / 河南招生考试网复制录取数据后粘贴于此&#10;&#10;支持格式：&#10;• 表格（年份 最低分 最低位次）&#10;• 自然语言（2025年最低分570，位次85847）&#10;• 简写（2025: 570 / 85847）"></textarea>
+              <div class="hist-paste-actions">
+                <button type="button" class="btn primary sm" onclick="parseHistPaste()">解析填充</button>
+                <button type="button" class="btn ghost sm" onclick="clearHistPaste()">清空</button>
+                <span class="hist-parse-hint" id="histParseHint"></span>
+              </div>
+            </div>
+            <table class="hist-input-tbl">
+              <thead><tr><th>年份</th><th>最低录取位次</th><th>最低录取分</th></tr></thead>
+              <tbody>
+                <tr><td><input type="text" id="g_hist_year_0" class="hi-year" placeholder="2025"></td><td><input type="text" id="g_hist_rank_0" placeholder="如 3000"></td><td><input type="text" id="g_hist_score_0" placeholder="如 651"></td></tr>
+                <tr><td><input type="text" id="g_hist_year_1" class="hi-year" placeholder="2024"></td><td><input type="text" id="g_hist_rank_1" placeholder="如 3200"></td><td><input type="text" id="g_hist_score_1" placeholder="如 648"></td></tr>
+                <tr><td><input type="text" id="g_hist_year_2" class="hi-year" placeholder="2023"></td><td><input type="text" id="g_hist_rank_2" placeholder="如 3400"></td><td><input type="text" id="g_hist_score_2" placeholder="如 645"></td></tr>
+              </tbody>
+            </table>
+            <div class="hint">系统自动取最近一年位次与你的位次对比，分析冲稳保风险</div>
+          </div>
+          <div class="field" style="margin-top:12px">
+            <label>备注 / 特殊要求</label>
+            <input type="text" id="g_note" placeholder="如 单科成绩要求、体检限制、需签协议等">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeOverlay('groupOverlay')">取消</button>
+      <button class="btn primary" onclick="saveGroup()">保存志愿组</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MAJOR MODAL ========== -->
+<div class="overlay" id="majorOverlay" onclick="if(event.target===this)closeOverlay('majorOverlay')">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="majorModalTitle">添加专业</h3>
+      <button class="iconbtn" onclick="closeOverlay('majorOverlay')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="m_groupId">
+      <input type="hidden" id="m_editId">
+      <div class="field row2">
+        <div>
+          <label>专业代码 <span class="req">*</span></label>
+          <input type="text" id="m_code" placeholder="如 18">
+        </div>
+        <div>
+          <label>专业招生人数</label>
+          <input type="text" id="m_enrollment" placeholder="如 2（选填）">
+        </div>
+      </div>
+      <div class="field">
+        <label>专业名称 <span class="req">*</span></label>
+        <input type="text" id="m_name" placeholder="如 理科实验班（数学、统计、信息安全等）">
+      </div>
+      <fieldset class="fieldset-collapsible" id="mFieldset">
+        <div class="fieldset-head" onclick="document.getElementById('mFieldset').classList.toggle('open')">
+          <svg class="fh-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          <span class="fh-title">更多配置（选填）</span>
+          <span class="fh-hint">近三年录取参考 · 备注</span>
+        </div>
+        <div class="fieldset-body">
+          <div class="field">
+            <label>近三年录取参考</label>
+            <table class="hist-input-tbl">
+              <thead><tr><th>年份</th><th>最低录取位次</th><th>最低录取分</th></tr></thead>
+              <tbody>
+                <tr><td><input type="text" id="m_hist_year_0" class="hi-year" placeholder="2025"></td><td><input type="text" id="m_hist_rank_0" placeholder="如 3000"></td><td><input type="text" id="m_hist_score_0" placeholder="如 651"></td></tr>
+                <tr><td><input type="text" id="m_hist_year_1" class="hi-year" placeholder="2024"></td><td><input type="text" id="m_hist_rank_1" placeholder="如 3200"></td><td><input type="text" id="m_hist_score_1" placeholder="如 648"></td></tr>
+                <tr><td><input type="text" id="m_hist_year_2" class="hi-year" placeholder="2023"></td><td><input type="text" id="m_hist_rank_2" placeholder="如 3400"></td><td><input type="text" id="m_hist_score_2" placeholder="如 645"></td></tr>
+              </tbody>
+            </table>
+            <div class="hint">填写该专业历年录取数据，便于对比组内专业录取难度</div>
+          </div>
+          <div class="field" style="margin-top:12px">
+            <label>备注 / 特殊要求</label>
+            <input type="text" id="m_note" placeholder="如 单科成绩要求、色盲限制、需签协议等">
+          </div>
+        </div>
+      </fieldset>
+      <div class="hint">每个专业组正式投档最多6个专业，可添加更多作为备选（备选需拖入前6方可生效）。专业顺序即为组内投档优先级。</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeOverlay('majorOverlay')">取消</button>
+      <button class="btn primary" onclick="saveMajor()">保存专业</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== IMPORT MODAL ========== -->
+<div class="overlay" id="importOverlay" onclick="if(event.target===this)closeOverlay('importOverlay')">
+  <div class="modal wide">
+    <div class="modal-head">
+      <h3>导入志愿数据</h3>
+      <button class="iconbtn" onclick="closeOverlay('importOverlay')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="fmt-intro">粘贴符合<b>导入格式说明</b>的 JSON 文本，或上传 <code>.json</code> 文件。可仅导入专业组数组（<code>[ {...}, {...} ]</code>），也可导入含考生信息的完整结构。导入会<b>替换当前草表</b>，请先导出备份。</div>
+      <div class="field">
+        <label>JSON 数据</label>
+        <textarea id="importText" placeholder='{"groups":[ ... ]}  或  [ ... ]' style="min-height:160px"></textarea>
+      </div>
+      <div class="field">
+        <label>或选择文件</label>
+        <input type="file" id="importFile" accept=".json,application/json">
+      </div>
+      <div class="seg" style="margin-top:4px">
+        <label><input type="radio" name="importMode" value="replace" checked><span>替换全部</span></label>
+        <label><input type="radio" name="importMode" value="append"><span>追加到末尾</span></label>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="openFormatModal()">查看格式说明</button>
+      <button class="btn primary" onclick="doImport()">执行导入</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FORMAT MODAL ========== -->
+<div class="overlay" id="formatOverlay" onclick="if(event.target===this)closeOverlay('formatOverlay')">
+  <div class="modal wide">
+    <div class="modal-head">
+      <h3>导入格式说明（供大模型生成）</h3>
+      <button class="iconbtn" onclick="closeOverlay('formatOverlay')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="fmt-intro">
+        本表使用 <b>JSON</b> 格式导入志愿。请让大模型<b>严格按下列结构</b>生成 JSON，可直接粘贴到"导入"窗口。<br>
+        <b>两种合法格式：</b>① 完整结构（含考生信息）；② 仅专业组数组 <code>[ ... ]</code>。字段说明见下表。
+      </div>
+      <div class="fmt-tabs">
+        <button class="active" onclick="fmtTab('fmtJSON',this)">完整示例</button>
+        <button onclick="fmtTab('fmtFields',this)">字段说明</button>
+        <button onclick="fmtTab('fmtPrompt',this)">大模型提示词</button>
+      </div>
+
+      <div id="fmtJSON">
+        <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><span id="fmtJSONcode"></span></div>
+      </div>
+
+      <div id="fmtFields" style="display:none">
+        <table class="fmt-field-tbl">
+          <thead><tr><th>字段</th><th>必填</th><th>类型</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td><code>groups</code></td><td>是</td><td>数组</td><td>专业组列表，每项为一个"院校专业组"志愿</td></tr>
+            <tr><td><code>schoolCode</code></td><td>是</td><td>字符串</td><td>院校代码，如 <code>"1485"</code></td></tr>
+            <tr><td><code>schoolName</code></td><td>是</td><td>字符串</td><td>院校名称，如 <code>"北京航空航天大学"</code></td></tr>
+            <tr><td><code>groupCode</code></td><td>是</td><td>字符串</td><td>专业组代码，如 <code>"101"</code>、<code>"G01"</code>、<code>"301"</code></td></tr>
+            <tr><td><code>groupName</code></td><td>否</td><td>字符串</td><td>专业组名称，如 <code>"普通组"</code>、<code>"国家专项计划组"</code></td></tr>
+            <tr><td><code>planType</code></td><td>否</td><td>字符串</td><td>计划类型，可选值见下 <span class="opt">普通组/国家专项计划/高校专项计划/地方专项计划/中外合作办学/定向就业/预科班/其他</span></td></tr>
+            <tr><td><code>groupEnrollment</code></td><td>否</td><td>字符串/数字</td><td>该专业组招生总人数，如 <code>"30"</code>，留空则不显示</td></tr>
+            <tr><td><code>strategy</code></td><td>否</td><td>字符串</td><td>冲稳保策略 <span class="opt">"冲"/"稳"/"保"</span>，留空为"—"</td></tr>
+            <tr><td><code>obeyAdjust</code></td><td>否</td><td>布尔</td><td>是否服从专业调剂，<code>true</code>/<code>false</code>，默认 <code>true</code></td></tr>
+            <tr><td><code>hidden</code></td><td>否</td><td>布尔</td><td>是否隐藏该组，<code>false</code>=显示，<code>true</code>=隐藏（查看模式中标灰显示，不参与序号），默认 <code>false</code>。用于草稿阶段暂时搁置某些志愿组</td></tr>
+            <tr><td><code>config</code></td><td>否</td><td>对象</td><td>专业组配置信息，含近三年录取参考、备注等（字段见下）</td></tr>
+            <tr><td><code>&nbsp;&nbsp;history</code></td><td>否</td><td>数组</td><td>近三年录取参考，每项含 year/rank/score，如 <code>[{"year":"2025","rank":"3000","score":"651"}]</code>。系统自动取最近一年位次与考生位次对比分析</td></tr>
+            <tr><td><code>&nbsp;&nbsp;&nbsp;&nbsp;year</code></td><td>否</td><td>字符串</td><td>录取年份，如 <code>"2025"</code></td></tr>
+            <tr><td><code>&nbsp;&nbsp;&nbsp;&nbsp;rank</code></td><td>否</td><td>字符串/数字</td><td>该年最低录取位次，如 <code>"3000"</code></td></tr>
+            <tr><td><code>&nbsp;&nbsp;&nbsp;&nbsp;score</code></td><td>否</td><td>字符串/数字</td><td>该年最低录取分，如 <code>"651"</code></td></tr>
+            <tr><td><code>&nbsp;&nbsp;note</code></td><td>否</td><td>字符串</td><td>备注/特殊要求，如单科成绩要求、体检限制、需签协议等</td></tr>
+            <tr><td><code>majors</code></td><td>是</td><td>数组</td><td>组内专业列表，前6个参与投档（可超出6个作为备选，顺序即组内优先级）</td></tr>
+            <tr><td><code>&nbsp;&nbsp;code</code></td><td>是</td><td>字符串</td><td>专业代码，如 <code>"18"</code></td></tr>
+            <tr><td><code>&nbsp;&nbsp;name</code></td><td>是</td><td>字符串</td><td>专业名称，如 <code>"理科实验班（数学、统计、信息安全等）"</code></td></tr>
+            <tr><td><code>&nbsp;&nbsp;enrollment</code></td><td>否</td><td>字符串/数字</td><td>该专业招生人数，如 <code>"2"</code></td></tr>
+            <tr><td><code>&nbsp;&nbsp;history</code></td><td>否</td><td>数组</td><td>该专业近三年录取参考，每项含 year/rank/score，格式同专业组 config.history，无数据填 <code>[]</code></td></tr>
+            <tr><td><code>&nbsp;&nbsp;note</code></td><td>否</td><td>字符串</td><td>该专业备注/特殊要求，如单科成绩要求、体检限制、需签协议等</td></tr>
+          </tbody>
+        </table>
+        <p class="hint" style="margin-top:12px">说明：完整结构外层还可含 <code>student</code>（含 score/rank/subject/province/year），导入时优先读取 <code>groups</code>；若顶层直接是数组则视为专业组列表。未提供的可选字段将使用默认值。</p>
+      </div>
+
+      <div id="fmtPrompt" style="display:none">
+        <div class="fmt-intro">将下面这段提示词发给大模型，让其按格式生成可导入的 JSON：</div>
+        <div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><span id="fmtPromptCode"></span></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeOverlay('formatOverlay')">关闭</button>
+      <button class="btn primary" onclick="closeOverlay('formatOverlay');openImportModal()">去导入</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- ========== LOGIN OVERLAY ========== -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-icon">志</div>
+    <h2>志愿填报同步系统</h2>
+    <p class="login-desc">输入密码以查看和编辑志愿数据<br>多端自动同步，数据存储在服务器</p>
+    <div class="login-field">
+      <input type="password" id="loginPassword" placeholder="请输入访问密码" autocomplete="off"
+             onkeydown="if(event.key==='Enter')doLogin()">
+      <button onclick="doLogin()">进入</button>
+    </div>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   河南新高考志愿草表 · 数据与逻辑
+   ============================================================ */
+const PLAN_TYPES = ["普通组","国家专项计划","高校专项计划","地方专项计划","中外合作办学","定向就业","预科班","其他"];
+
+const DEFAULT_DATA = {
+  student:{ score:657, rank:3471, subject:"物理", province:"河南", year:2026 },
+  groups:[
+    {
+      id:gid(), schoolCode:"1485", schoolName:"北京航空航天大学",
+      groupCode:"G01", groupName:"高校专项计划组", planType:"高校专项计划",
+      groupEnrollment:"", strategy:"冲", obeyAdjust:true, hidden:false,
+      config:{history:[
+        {year:"2025",rank:"3000",score:"651"},
+        {year:"2024",rank:"3200",score:"648"},
+        {year:"2023",rank:"3400",score:"645"}
+      ], note:"高校专项计划，需农村户籍资格"},
+      majors:[
+        {id:gid(), code:"18", name:"理科实验班（数学、统计、信息安全等）", enrollment:"", history:[{year:"2025",rank:"2800",score:"652"},{year:"2024",rank:"2900",score:"649"}], note:"色盲限报"},
+        {id:gid(), code:"17", name:"工科试验班（具身智能、机械等）", enrollment:"", history:[]}
+      ]
+    },
+    {
+      id:gid(), schoolCode:"1485", schoolName:"北京航空航天大学",
+      groupCode:"301", groupName:"国家专项计划组", planType:"国家专项计划",
+      groupEnrollment:"", strategy:"冲", obeyAdjust:true, hidden:false,
+      config:{history:[
+        {year:"2025",rank:"3100",score:"650"},
+        {year:"2024",rank:"3300",score:"647"},
+        {year:"2023",rank:"3500",score:"644"}
+      ], note:"国家专项计划，需贫困地区资格"},
+      majors:[
+        {id:gid(), code:"16", name:"理科实验班（数学、统计、信息安全等）", enrollment:""},
+        {id:gid(), code:"15", name:"工科试验班（具身智能、机械等）", enrollment:""}
+      ]
+    },
+    {
+      id:gid(), schoolCode:"1485", schoolName:"北京航空航天大学",
+      groupCode:"101", groupName:"普通组", planType:"普通组",
+      groupEnrollment:"", strategy:"冲", obeyAdjust:true, hidden:false,
+      config:{history:[
+        {year:"2025",rank:"2800",score:"653"},
+        {year:"2024",rank:"2900",score:"650"},
+        {year:"2023",rank:"3000",score:"647"}
+      ], note:"普通组竞争激烈，建议服从调剂"},
+      majors:[
+        {id:gid(), code:"12", name:"计算机卓越", enrollment:""},
+        {id:gid(), code:"07", name:"计算机工科试验班", enrollment:""},
+        {id:gid(), code:"09", name:"数学理科实验班", enrollment:""},
+        {id:gid(), code:"08", name:"信息科学工科试验班", enrollment:""},
+        {id:gid(), code:"04", name:"未来工程师工科试验班", enrollment:""},
+        {id:gid(), code:"06", name:"航空航天工科试验班", enrollment:""}
+      ]
+    },
+    {
+      id:gid(), schoolCode:"1110", schoolName:"中国人民大学",
+      groupCode:"G02", groupName:"高校专项计划组", planType:"高校专项计划",
+      groupEnrollment:"", strategy:"稳", obeyAdjust:true, hidden:true,
+      config:{history:[
+        {year:"2025",rank:"3600",score:"654"},
+        {year:"2024",rank:"3700",score:"651"},
+        {year:"2023",rank:"3800",score:"648"}
+      ], note:"数学类仅招2人，位次接近"},
+      majors:[
+        {id:gid(), code:"24", name:"数学类", enrollment:"2"}
+      ]
+    },
+    {
+      id:gid(), schoolCode:"1165", schoolName:"南开大学",
+      groupCode:"101", groupName:"普通组", planType:"普通组",
+      groupEnrollment:"", strategy:"稳", obeyAdjust:true, hidden:false,
+      config:{history:[
+        {year:"2025",rank:"4000",score:"648"},
+        {year:"2024",rank:"4200",score:"645"},
+        {year:"2023",rank:"4400",score:"642"}
+      ], note:"稳妥选择，位次优势明显"},
+      majors:[
+        {id:gid(), code:"03", name:"卓越", enrollment:""},
+        {id:gid(), code:"07", name:"数学与大数据", enrollment:""},
+        {id:gid(), code:"04", name:"信息科学与技术", enrollment:""}
+      ]
+    }
+  ]
+};
+
+let state = null;
+let dataVersion = '';  // 服务器数据版本号
+let syncTimer = null;
+let serverAvailable = false;
+
+function gid(){ return 'g'+Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-3) }
+
+/* ========== 服务器 API ========== */
+const API = window.location.origin;
+
+function getToken(){
+  const m = document.cookie.match(/(?:^|;\s*)volunteer_session=([^;]+)/);
+  return m ? m[1] : '';
+}
+
+async function apiCall(method, path, body){
+  const headers = {};
+  const tok = getToken();
+  if(tok) headers['X-Session'] = tok;
+  if(body !== undefined){
+    headers['Content-Type'] = 'application/json';
+    body = JSON.stringify(body);
+  }
+  const resp = await fetch(API + path, { method, headers, body });
+  return resp;
+}
+
+async function checkAuth(){
+  try{
+    const resp = await apiCall('GET', '/api/check');
+    if(resp.ok){ const j = await resp.json(); return j.authenticated===true; }
+  }catch(e){}
+  return false;
+}
+
+async function doLogin(){
+  const pw = document.getElementById('loginPassword').value.trim();
+  const errEl = document.getElementById('loginErr');
+  if(!pw){ errEl.textContent = '请输入密码'; return; }
+  errEl.textContent = '';
+  try{
+    const resp = await fetch(API + '/api/auth', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({password:pw})
+    });
+    const j = await resp.json();
+    if(j.ok){
+      document.getElementById('loginPassword').value = '';
+      await afterLogin();
+    }else{
+      errEl.textContent = j.error || '密码错误';
+    }
+  }catch(e){
+    errEl.textContent = '无法连接服务器，请确认服务器已启动';
+  }
+}
+
+async function afterLogin(){
+  const overlay = document.getElementById('loginOverlay');
+  overlay.classList.add('fade-out');
+  // 从服务器加载数据
+  const serverData = await loadFromServer();
+  if(serverData !== null){
+    state = serverData;
+    serverAvailable = true;
+    saveLocal(state);
+  }else{
+    // 服务器无数据，使用本地数据并上传（首次使用场景）
+    if(!state) state = loadLocal();
+    saveToServer(state);
+    serverAvailable = true;
+  }
+  render();
+  startSyncPolling();
+  updateSyncStatus(true);
+  // 动画结束后彻底隐藏遮罩
+  setTimeout(()=>{ overlay.style.display = 'none'; }, 420);
+}
+
+async function loadFromServer(){
+  try{
+    const qs = dataVersion ? '?version='+dataVersion : '';
+    const resp = await apiCall('GET', '/api/data'+qs);
+    if(resp.status === 304) return null; // 未变化
+    if(!resp.ok) return null;
+    const j = await resp.json();
+    dataVersion = j.version || '';
+    if(j.data !== null && j.data !== undefined){
+      const d = typeof j.data === 'string' ? JSON.parse(j.data) : j.data;
+      // normalize data
+      if(d && Array.isArray(d.groups)){
+        d.groups.forEach(g=>{
+          if(!g.config) g.config={history:[],note:''};
+          else g.config=normalizeConfig(g.config);
+          if('optional' in g && !('hidden' in g)){ g.hidden = g.optional===true; delete g.optional; }
+        });
+      }
+      return d;
+    }
+    return null;
+  }catch(e){ return null; }
+}
+
+async function saveToServer(s){
+  try{
+    const resp = await apiCall('POST', '/api/data', {data:s});
+    if(!resp.ok) return false;
+    const j = await resp.json();
+    if(j.version) dataVersion = j.version;
+    serverAvailable = true;
+    return true;
+  }catch(e){ serverAvailable = false; return false; }
+}
+
+function updateSyncStatus(online){
+  const dot = document.getElementById('syncDot');
+  if(!dot) return;
+  const circle = dot.querySelector('.sd-circle');
+  const label = document.getElementById('syncLabel');
+  circle.className = 'sd-circle ' + (online ? 'online' : 'offline');
+  label.textContent = online ? '已连接服务器' : '离线（本地保存）';
+}
+
+function startSyncPolling(){
+  if(syncTimer) clearInterval(syncTimer);
+  syncTimer = setInterval(async ()=>{
+    try{
+      const serverData = await loadFromServer();
+      if(serverData !== null){
+        // 服务器有新数据 → 更新本地
+        state = serverData;
+        saveLocal(state);
+        render();
+        if(document.body.classList.contains('view-mode')) renderViewDoc();
+        updateSyncStatus(true);
+      }
+    }catch(e){}
+  }, 4000); // 每 4 秒轮询一次
+}
+
+/* ========== 本地存储（兜底） ========== */
+function loadLocal(){
+  try{
+    const s = localStorage.getItem('hn2026_volunteer');
+    if(s){ const p = JSON.parse(s); if(p && Array.isArray(p.groups)){
+      p.groups.forEach(g=>{
+        if(!g.config) g.config={history:[],note:''};
+        else g.config=normalizeConfig(g.config);
+        if('optional' in g && !('hidden' in g)){ g.hidden = g.optional===true; delete g.optional; }
+      });
+      return p;
+    } }
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+}
+
+function saveLocal(s){
+  try{ localStorage.setItem('hn2026_volunteer', JSON.stringify(s)); }catch(e){}
+}
+
+async function saveState(){
+  saveLocal(state);
+  if(serverAvailable){
+    const ok = await saveToServer(state);
+    updateSyncStatus(ok);
+  }
+}
+
+/* normalize config */
+function normalizeConfig(c){
+  if(!c) c={};
+  let history=[];
+  if(Array.isArray(c.history)){
+    history=c.history.filter(h=>h&&(h.year||h.rank||h.score)).map(h=>({
+      year:String(h.year||''), rank:String(h.rank||''), score:String(h.score||'')
+    }));
+  }
+  /* migrate old flat fields into history[0] */
+  if(history.length===0 && (c.histYear||c.histRank||c.histScore)){
+    history=[{year:String(c.histYear||''),rank:String(c.histRank||''),score:String(c.histScore||'')}];
+  }
+  return {
+    history:history,
+    note:c.note||''
+  };
+}
+
+/* extract most recent year's rank/score from config (for rank analysis) */
+function latestHist(cfg){
+  if(!cfg) return null;
+  if(Array.isArray(cfg.history)&&cfg.history.length){
+    const sorted=[...cfg.history].filter(h=>h.rank).sort((a,b)=>parseInt(b.year||'0')-parseInt(a.year||'0'));
+    if(sorted.length) return {rank:parseInt(sorted[0].rank),year:sorted[0].year,score:sorted[0].score};
+  }
+  /* fallback to old flat format */
+  if(cfg.histRank) return {rank:parseInt(cfg.histRank),year:cfg.histYear,score:cfg.histScore};
+  return null;
+}
+
+/* ---------- icons ---------- */
+const IC = {
+  edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+  del:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>',
+  down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>',
+  chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>',
+  clone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>'
+};
+
+/* ---------- render ---------- */
+function render(){
+  const list = document.getElementById('vlist');
+  list.innerHTML = '';
+  if(!state.groups.length){
+    list.innerHTML = `<div class="empty-state"><div class="ei">📋</div><h3>还没有志愿</h3><p>点击「新增志愿组」开始编排，或「导入」已有数据。</p></div>`;
+  }else{
+    state.groups.forEach((g,i)=> list.appendChild(renderGroup(g,i)));
+  }
+  updateStats();
+  initSortables();
+  saveState();
+}
+
+function stratClass(s){ return s==='冲'?'strat-rush':s==='稳'?'strat-stable':s==='保'?'strat-protect':'' }
+function stratTag(s){ return s? `<span class="gtag ${stratClass(s)}">${s}</span>`:'' }
+
+/* rank analysis: compare student rank with historical rank */
+function rankAnalysis(cfg){
+  const studentRank = state.student.rank;
+  const lh = latestHist(cfg);
+  if(!lh || !lh.rank || !studentRank) return null;
+  const hr = lh.rank;
+  const gap = studentRank - hr; // positive = student ranks worse (higher number)
+  const pct = Math.abs(gap) / hr;
+  let type, label, icon, desc;
+  if(gap < 0){ // studentRank < hr → student is better than school's admitted → should be 保
+    type = pct > 0.10 ? 'protect' : 'stable';
+    label = pct > 0.10 ? '保底匹配' : '稳中有余';
+    icon = '<path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/>';
+    desc = `你的位次优于该校${Math.abs(gap)}名`;
+  } else if(pct <= 0.05){ // within 5% → 稳
+    type = 'stable';
+    label = '位次接近';
+    icon = '<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>';
+    desc = `仅差${gap}名，属稳段`;
+  } else if(pct <= 0.15){ // 5%-15% → 冲
+    type = 'rush';
+    label = '需冲刺';
+    icon = '<path d="M12 2L2 22h20L12 2z"/><path d="M12 9v4M12 17h.01"/>';
+    desc = `你的位次落后${gap}名`;
+  } else { // too far → risky冲 or mismatch
+    type = 'warn';
+    label = '差距较大';
+    icon = '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/>';
+    desc = `落后${gap}名，录取概率低`;
+  }
+  return {type,label,icon,desc,gap,hr,refYear:lh.year};
+}
+
+function renderConfigPanel(g){
+  const cfg = normalizeConfig(g.config||{});
+  const hist = cfg.history||[];
+  const hasHist = hist.length>0;
+  const hasCfg = hasHist || cfg.note;
+  const ra = rankAnalysis(cfg);
+  const parts = [];
+  if(hasHist) parts.push(`近${hist.length}年录取参考`);
+  const summary = parts.length ? parts.join(' · ') : '点击展开填写配置信息';
+  const raHtml = ra ? `
+    <div class="rank-analysis ${ra.type}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${ra.icon}</svg>
+      <span>位次分析：<b>${ra.label}</b> · ${esc(ra.desc)}</span>
+      <span class="ra-gap">${ra.refYear?'参考'+esc(ra.refYear)+' ':''}最低位次 ${ra.hr} · 你 ${state.student.rank}</span>
+    </div>` : '';
+  const histRows = hasHist ? hist.map(h=>`<tr><td class="h-year">${esc(h.year)||'—'}</td><td class="h-rank">${h.rank?esc(h.rank):'—'}</td><td class="h-score">${h.score?esc(h.score):'—'}</td></tr>`).join('') : '';
+  const cfgItems = `
+    <div class="cfg-grid">
+      ${hasHist?`<div class="cfg-item full">
+        <div class="cfg-label">近三年录取参考</div>
+        <table class="cfg-hist-tbl">
+          <thead><tr><th>年份</th><th>最低位次</th><th>最低分</th></tr></thead>
+          <tbody>${histRows}</tbody>
+        </table>
+      </div>`:`<div class="cfg-item full"><div class="cfg-label">近三年录取参考</div><div class="cfg-value empty">未填写</div></div>`}
+      <div class="cfg-item full">
+        <div class="cfg-label">备注 / 特殊要求</div>
+        <div class="cfg-value note ${cfg.note?'':'empty'}">${cfg.note?esc(cfg.note):'未填写'}</div>
+      </div>
+    </div>${raHtml}`;
+  return `
+    <button class="cfg-toggle" onclick="toggleConfig('${g.id}')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      专业组配置 <span class="cfg-summary">${summary}</span>
+    </button>
+    <div class="cfg-panel">${hasCfg||ra?cfgItems:'<div style="color:var(--muted);font-size:12.5px;padding:4px 0">尚未填写配置信息，点击「编辑」补充近三年录取参考等数据。</div>'+raHtml}</div>`;
+}
+
+function toggleConfig(id){
+  const card = document.querySelector(`.group[data-id="${id}"]`);
+  if(card) card.classList.toggle('cfg-open');
+}
+
+function renderGroup(g,idx){
+  const isSpecial = g.planType && g.planType!=='普通组';
+  const el = document.createElement('div');
+  el.className = 'group'+(g.hidden===true?' hidden-on':'');
+  el.dataset.id = g.id;
+  const enr = g.groupEnrollment? `<span class="gtag enr">招 ${g.groupEnrollment} 人</span>`:'';
+  const adj = g.obeyAdjust? `<span class="gtag adjust">服从调剂</span>`:`<span class="gtag adjust no">不服从</span>`;
+  const plan = g.planType? `<span class="gtag plan">${g.planType}</span>`:'';
+  const gname = g.groupName? `· ${g.groupName}`:'';
+  const maxed = g.majors.length>=6;
+  const backupCount = Math.max(0, g.majors.length-6);
+  const priorityCount = Math.min(6, g.majors.length);
+  el.innerHTML = `
+    <div class="group-head" data-toggle="${g.id}">
+      <div class="gdrag" title="拖拽排序"><span></span><span></span><span></span></div>
+      <div class="gnum ${isSpecial?'special':''}">${idx+1}</div>
+      <div class="gcore">
+        <div class="gschool">
+          <span class="code">${esc(g.schoolCode)}</span>
+          <span class="name">${esc(g.schoolName)}</span>
+          <span class="code">${esc(g.groupCode)}</span>
+          <span class="name" style="font-weight:400;font-size:14px;color:var(--ink-soft)">${esc(gname)}</span>
+        </div>
+        <div class="ggroup-tag">
+          ${plan}${enr}${adj}${stratTag(g.strategy)}
+          <span class="gtag">专业 ${priorityCount}/6${backupCount>0?` +${backupCount}备选`:''}</span>
+        </div>
+      </div>
+      <div class="gtoggle ${g.hidden===true?'':'on'}" onclick="toggleHidden('${g.id}')" title="切换显示/隐藏">
+        <span class="gt-label">${g.hidden===true?'隐藏':'显示'}</span>
+        <div class="gt-track"><div class="gt-knob"></div></div>
+      </div>
+      <div class="gacts">
+        <button class="iconbtn" title="折叠/展开" onclick="toggleGroup('${g.id}')">${IC.chev}</button>
+        <button class="iconbtn updown" title="上移" onclick="moveGroup('${g.id}',-1)" ${idx===0?'disabled':''}>${IC.up}</button>
+        <button class="iconbtn updown" title="下移" onclick="moveGroup('${g.id}',1)" ${idx===state.groups.length-1?'disabled':''}>${IC.down}</button>
+        <button class="iconbtn" title="编辑" onclick="openGroupModal('${g.id}')">${IC.edit}</button>
+        <button class="iconbtn" title="克隆" onclick="cloneGroup('${g.id}')">${IC.clone}</button>
+        <button class="iconbtn del" title="删除" onclick="deleteGroup('${g.id}')">${IC.del}</button>
+      </div>
+    </div>
+    <div class="majors">
+      <div class="majors-head">
+        <span class="mlab">组内专业（顺序即优先级）<b> ${priorityCount}</b><span class="${maxed?'full':''}"> ${maxed?'/6':'/6'}</span>${backupCount>0?`<span class="mlab-backup"> +${backupCount}备选</span>`:''}</span>
+        ${backupCount>0?'<span class="majors-tip">仅前6个参与投档，备选专业需拖入前6方可生效</span>':''}
+      </div>
+      <div class="mlist" data-majors="${g.id}">
+        ${g.majors.map((m,mi)=>renderMajor(g.id,m,mi,g.majors.length)).join('')}
+      </div>
+      <button class="add-major" onclick="openMajorModal('${g.id}')">${IC.plus} 添加专业${maxed?'（备选）':''}</button>
+    </div>
+    <div class="cfg-wrap">${renderConfigPanel(g)}</div>`;
+  return el;
+}
+
+function renderMajor(gid,m,mi,total){
+  const isBackup = mi>=6;
+  const enr = m.enrollment? `<span class="menr">招 ${esc(m.enrollment)} 人</span>`:`<span class="menr empty">人数未填</span>`;
+  const mh = m.history||[];
+  const mhist = mh.length>0 ? `<span class="menr" style="color:var(--teal)">位次 ${mh.map(h=>h.rank||'?').join('/')}</span>` : '';
+  const mnote = m.note ? `<span class="menr" style="color:var(--terra)">备注</span>` : '';
+  const backupTag = isBackup ? `<span class="menr backup-tag">备选 ${mi+1}</span>` : `<span class="menr priority-tag">优先 ${mi+1}</span>`;
+  return `<div class="major${isBackup?' backup':''}" data-id="${m.id}">
+    <div class="mdrag" title="拖拽排序"><span></span><span></span><span></span></div>
+    <div class="mcode">${esc(m.code)}</div>
+    <div class="mname">${esc(m.name)}</div>
+    ${backupTag}
+    ${enr}
+    ${mhist}
+    ${mnote}
+    <div class="macts">
+      <button class="iconbtn updown" title="上移" onclick="moveMajor('${gid}','${m.id}',-1)" ${mi===0?'disabled':''}>${IC.up}</button>
+      <button class="iconbtn updown" title="下移" onclick="moveMajor('${gid}','${m.id}',1)" ${mi===total-1?'disabled':''}>${IC.down}</button>
+      <button class="iconbtn" title="编辑" onclick="openMajorModal('${gid}','${m.id}')">${IC.edit}</button>
+      <button class="iconbtn del" title="删除" onclick="deleteMajor('${gid}','${m.id}')">${IC.del}</button>
+    </div>
+  </div>`;
+}
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])) }
+
+function updateStats(){
+  const visible = state.groups.filter(g=>g.hidden!==true).length;
+  const hidden = state.groups.length - visible;
+  document.getElementById('cntGroups').textContent = state.groups.length;
+  document.getElementById('cntMajors').textContent = state.groups.reduce((s,g)=>s+g.majors.length,0);
+  const visEl = document.getElementById('cntVisible');
+  if(visEl) visEl.textContent = visible;
+  const hidEl = document.getElementById('cntHidden');
+  if(hidEl) hidEl.textContent = hidden;
+}
+
+/* ---------- toggle / collapse ---------- */
+function toggleGroup(id){
+  const card = document.querySelector(`.group[data-id="${id}"]`);
+  if(card) card.classList.toggle('collapsed');
+}
+
+/* ---------- group CRUD ---------- */
+function fillHistInputs(cfg){
+  const c = normalizeConfig(cfg||{});
+  const hist = c.history||[];
+  for(let i=0;i<3;i++){
+    const h = hist[i]||{};
+    setVal('g_hist_year_'+i, h.year||'');
+    setVal('g_hist_rank_'+i, h.rank||'');
+    setVal('g_hist_score_'+i, h.score||'');
+  }
+}
+function collectHistInputs(){
+  const history=[];
+  for(let i=0;i<3;i++){
+    const y=val('g_hist_year_'+i).trim(), r=val('g_hist_rank_'+i).trim(), s=val('g_hist_score_'+i).trim();
+    if(y||r||s) history.push({year:y,rank:r,score:s});
+  }
+  return history;
+}
+
+/* ---------- smart paste: parse admission data ---------- */
+function toggleHistPaste(){
+  const area = document.getElementById('histPasteArea');
+  const isShown = area.style.display !== 'none';
+  area.style.display = isShown ? 'none' : 'block';
+  if(!isShown){
+    document.getElementById('histPasteText').focus();
+    document.getElementById('histParseHint').textContent = '';
+  }
+}
+function clearHistPaste(){
+  document.getElementById('histPasteText').value = '';
+  document.getElementById('histParseHint').textContent = '';
+  document.getElementById('histPasteText').focus();
+}
+function openScoreQuery(){
+  const sn = val('g_schoolName').trim();
+  const url = sn
+    ? `https://gaokao.chsi.com.cn/sch/search.do?searchName=${encodeURIComponent(sn)}`
+    : 'https://gaokao.chsi.com.cn/sch/search.do';
+  window.open(url, '_blank');
+  const hint = document.getElementById('histParseHint');
+  if(hint){
+    hint.className = 'hist-parse-hint';
+    hint.textContent = '已在新标签页打开阳光高考，搜索到院校后进入「往年录取信息」，选择河南物理类，复制表格数据后回到此处粘贴';
+  }
+}
+function parseHistPaste(){
+  const text = document.getElementById('histPasteText').value.trim();
+  const hint = document.getElementById('histParseHint');
+  if(!text){
+    hint.className = 'hist-parse-hint err';
+    hint.textContent = '请先粘贴录取数据';
+    return;
+  }
+  const lines = text.split(/\n/).map(l=>l.trim()).filter(l=>l);
+  const results = {};  /* {year: {score, rank}} */
+
+  for(const line of lines){
+    /* detect year (2020-2039) */
+    const yearMatch = line.match(/20([23]\d)/);
+    if(!yearMatch) continue;  /* skip header / non-data lines */
+    const year = yearMatch[0];
+
+    /* remove year from line for number extraction */
+    const lineRest = line.replace(yearMatch[0], ' ');
+
+    /* extract all numbers (support thousands separator) */
+    const rawNums = lineRest.match(/\d[\d,]*/g) || [];
+    const nums = rawNums.map(n=>parseInt(n.replace(/,/g,''))).filter(n=>n>0 && n!==parseInt(year));
+    if(nums.length === 0) continue;
+
+    let score = '', rank = '';
+
+    /* method 1: keyword matching */
+    const rankKw = line.match(/位次[^\d]*([\d,]+)/);
+    if(rankKw) rank = rankKw[1].replace(/,/g,'');
+    const scoreKw = line.match(/(?:最低分|录取分|投档分|最低.*分)[^\d]*([\d]+)/);
+    if(scoreKw) score = scoreKw[1];
+
+    /* method 2: numeric heuristic for unmatched fields */
+    const smalls = nums.filter(n=>n<=750);
+    const bigs = nums.filter(n=>n>750);
+    if(!score && !rank){
+      if(smalls.length>0 && bigs.length>0){
+        score = String(Math.min(...smalls));
+        rank = String(Math.max(...bigs));
+      } else if(smalls.length>=2){
+        score = String(Math.min(...smalls));
+      } else if(smalls.length===1 && bigs.length===0){
+        score = String(smalls[0]);
+      } else if(bigs.length>0){
+        rank = String(Math.max(...bigs));
+      }
+    } else if(!score){
+      if(smalls.length>0) score = String(Math.min(...smalls));
+    } else if(!rank){
+      if(bigs.length>0) rank = String(Math.max(...bigs));
+    }
+
+    if(score || rank){
+      results[year] = {score, rank};
+    }
+  }
+
+  const sortedYears = Object.keys(results).sort((a,b)=>parseInt(b)-parseInt(a)).slice(0,3);
+
+  if(sortedYears.length === 0){
+    hint.className = 'hist-parse-hint err';
+    hint.textContent = '未识别到有效数据，请确保每行包含年份和分数/位次';
+    return;
+  }
+
+  /* fill inputs */
+  let filled = 0;
+  sortedYears.forEach((year, i)=>{
+    if(i >= 3) return;
+    const d = results[year];
+    setVal('g_hist_year_'+i, year);
+    setVal('g_hist_rank_'+i, d.rank||'');
+    setVal('g_hist_score_'+i, d.score||'');
+    filled++;
+  });
+  /* clear remaining rows */
+  for(let i=sortedYears.length; i<3; i++){
+    setVal('g_hist_year_'+i, '');
+    setVal('g_hist_rank_'+i, '');
+    setVal('g_hist_score_'+i, '');
+  }
+
+  hint.className = 'hist-parse-hint ok';
+  const parts = sortedYears.map(y=>{
+    const d = results[y];
+    return `${y}年${d.score?' 分'+d.score:''}${d.rank?' 位次'+d.rank:''}`;
+  });
+  hint.textContent = `已填充 ${filled} 年：${parts.join('；')}`;
+}
+function hasConfigData(c){
+  return (Array.isArray(c.history)&&c.history.length>0) || c.note;
+}
+
+function openGroupModal(id){
+  const ov = document.getElementById('groupOverlay');
+  document.getElementById('g_editId').value = id||'';
+  document.getElementById('g_cloneFrom').value = '';
+  document.getElementById('groupModalTitle').textContent = id?'编辑志愿组':'新增志愿组';
+  document.getElementById('cfgFieldset').classList.remove('open');
+  if(id){
+    const g = state.groups.find(x=>x.id===id);
+    if(!g) return;
+    setVal('g_schoolCode',g.schoolCode); setVal('g_schoolName',g.schoolName);
+    setVal('g_groupCode',g.groupCode); setVal('g_groupName',g.groupName);
+    setVal('g_planType',g.planType||'普通组'); setVal('g_enrollment',g.groupEnrollment||'');
+    setVal('g_strategy',g.strategy||'');
+    setRadio('g_adjust', g.obeyAdjust!==false ? 'true':'false');
+    setRadio('g_hidden', g.hidden===true ? 'true':'false');
+    const c = normalizeConfig(g.config);
+    fillHistInputs(c);
+    setVal('g_note',c.note||'');
+    if(hasConfigData(c)) document.getElementById('cfgFieldset').classList.add('open');
+  }else{
+    setVal('g_schoolCode',''); setVal('g_schoolName',''); setVal('g_groupCode','');
+    setVal('g_groupName',''); setVal('g_planType','普通组'); setVal('g_enrollment','');
+    setVal('g_strategy',''); setRadio('g_adjust','true');
+    setRadio('g_hidden','false');
+    fillHistInputs({});
+    setVal('g_note','');
+  }
+  ov.classList.add('show');
+}
+function cloneGroup(id){
+  const g = state.groups.find(x=>x.id===id);
+  if(!g) return;
+  const ov = document.getElementById('groupOverlay');
+  document.getElementById('g_editId').value = '';
+  document.getElementById('g_cloneFrom').value = id;
+  document.getElementById('groupModalTitle').textContent = '克隆志愿组';
+  document.getElementById('cfgFieldset').classList.remove('open');
+  setVal('g_schoolCode',g.schoolCode); setVal('g_schoolName',g.schoolName);
+  setVal('g_groupCode',g.groupCode); setVal('g_groupName',g.groupName);
+  setVal('g_planType',g.planType||'普通组'); setVal('g_enrollment',g.groupEnrollment||'');
+  setVal('g_strategy',g.strategy||'');
+  setRadio('g_adjust', g.obeyAdjust!==false ? 'true':'false');
+  setRadio('g_hidden', g.hidden===true ? 'true':'false');
+  const c = normalizeConfig(g.config);
+  fillHistInputs(c);
+  setVal('g_note',c.note||'');
+  if(hasConfigData(c)) document.getElementById('cfgFieldset').classList.add('open');
+  ov.classList.add('show');
+}
+function saveGroup(){
+  const id = document.getElementById('g_editId').value;
+  const sc = val('g_schoolCode').trim(), sn = val('g_schoolName').trim();
+  const gc = val('g_groupCode').trim();
+  if(!sc){ toast('请填写院校代码','err'); return; }
+  if(!sn){ toast('请填写院校名称','err'); return; }
+  if(!gc){ toast('请填写专业组代码','err'); return; }
+  const obj = {
+    schoolCode:sc, schoolName:sn, groupCode:gc,
+    groupName:val('g_groupName').trim(), planType:val('g_planType'),
+    groupEnrollment:val('g_enrollment').trim(), strategy:val('g_strategy'),
+    obeyAdjust: getRadio('g_adjust')!=='false',
+    hidden: getRadio('g_hidden')==='true',
+    config:{
+      history:collectHistInputs(),
+      note:val('g_note').trim()
+    }
+  };
+  if(id){
+    const g = state.groups.find(x=>x.id===id);
+    Object.assign(g,obj);
+    toast('志愿组已更新');
+  }else{
+    const cloneFrom = document.getElementById('g_cloneFrom').value;
+    obj.id = gid();
+    if(cloneFrom){
+      const src = state.groups.find(x=>x.id===cloneFrom);
+      obj.majors = src ? src.majors.map(m=>({...m, id:gid()})) : [];
+      toast('已克隆志愿组（含'+obj.majors.length+'个专业）');
+    }else{
+      obj.majors = [];
+      toast('已新增志愿组');
+    }
+    state.groups.push(obj);
+  }
+  closeOverlay('groupOverlay');
+  render();
+  if(document.body.classList.contains('view-mode')) renderViewDoc();
+}
+
+function deleteGroup(id){
+  const g = state.groups.find(x=>x.id===id);
+  if(!g) return;
+  if(confirm(`确认删除第 ${state.groups.indexOf(g)+1} 个志愿组「${g.schoolName} ${g.groupCode}」？`)){
+    state.groups = state.groups.filter(x=>x.id!==id);
+    render();
+    toast('已删除志愿组');
+  }
+}
+function toggleHidden(id){
+  const g = state.groups.find(x=>x.id===id);
+  if(!g) return;
+  g.hidden = g.hidden===true ? false : true;
+  saveState();
+  render();
+  if(document.body.classList.contains('view-mode')) renderViewDoc();
+  toast(g.hidden===true ? '已隐藏（查看模式中标灰显示，不参与序号）' : '已显示');
+}
+function moveGroup(id,dir){
+  const i = state.groups.findIndex(x=>x.id===id);
+  const j = i+dir;
+  if(i<0||j<0||j>=state.groups.length) return;
+  [state.groups[i],state.groups[j]] = [state.groups[j],state.groups[i]];
+  render();
+}
+
+/* ---------- major CRUD ---------- */
+function openMajorModal(gid,id){
+  const ov = document.getElementById('majorOverlay');
+  document.getElementById('m_groupId').value = gid;
+  document.getElementById('m_editId').value = id||'';
+  document.getElementById('majorModalTitle').textContent = id?'编辑专业':'添加专业';
+  if(id){
+    const g = state.groups.find(x=>x.id===gid);
+    const m = g && g.majors.find(x=>x.id===id);
+    if(!m) return;
+    setVal('m_code',m.code); setVal('m_name',m.name); setVal('m_enrollment',m.enrollment||'');
+    setVal('m_note',m.note||'');
+    const h = m.history||[];
+    for(let i=0;i<3;i++){
+      const hi = h[i]||{};
+      setVal('m_hist_year_'+i, hi.year||'');
+      setVal('m_hist_rank_'+i, hi.rank||'');
+      setVal('m_hist_score_'+i, hi.score||'');
+    }
+    if(h.some(x=>x.year||x.rank||x.score) || m.note) document.getElementById('mFieldset').classList.add('open');
+  }else{
+    setVal('m_code',''); setVal('m_name',''); setVal('m_enrollment','');
+    setVal('m_note','');
+    for(let i=0;i<3;i++){ setVal('m_hist_year_'+i,''); setVal('m_hist_rank_'+i,''); setVal('m_hist_score_'+i,''); }
+    document.getElementById('mFieldset').classList.remove('open');
+  }
+  ov.classList.add('show');
+}
+function saveMajor(){
+  const gidv = document.getElementById('m_groupId').value;
+  const id = document.getElementById('m_editId').value;
+  const code = val('m_code').trim(), name = val('m_name').trim();
+  if(!code){ toast('请填写专业代码','err'); return; }
+  if(!name){ toast('请填写专业名称','err'); return; }
+  const g = state.groups.find(x=>x.id===gidv);
+  if(!g) return;
+  const history=[];
+  for(let i=0;i<3;i++){
+    const y=val('m_hist_year_'+i).trim(), r=val('m_hist_rank_'+i).trim(), s=val('m_hist_score_'+i).trim();
+    if(y||r||s) history.push({year:y,rank:r,score:s});
+  }
+  const note = val('m_note').trim();
+  if(id){
+    const m = g.majors.find(x=>x.id===id);
+    if(m){ m.code=code; m.name=name; m.enrollment=val('m_enrollment').trim(); m.history=history; m.note=note; toast('专业已更新'); }
+  }else{
+    if(g.majors.length>=6){
+      g.majors.push({id:gid(),code,name,enrollment:val('m_enrollment').trim(),history,note});
+      toast('已添加备选专业（第7+个为备选，仅前6个参与投档）');
+    }else{
+      g.majors.push({id:gid(),code,name,enrollment:val('m_enrollment').trim(),history,note});
+      toast('已添加专业');
+    }
+  }
+  closeOverlay('majorOverlay');
+  render();
+  if(document.body.classList.contains('view-mode')) renderViewDoc();
+}
+function deleteMajor(gidv,id){
+  const g = state.groups.find(x=>x.id===gidv);
+  if(!g) return;
+  const m = g.majors.find(x=>x.id===id);
+  if(!m) return;
+  if(confirm(`确认删除专业「${m.name}」？`)){
+    g.majors = g.majors.filter(x=>x.id!==id);
+    render();
+    toast('已删除专业');
+  }
+}
+function moveMajor(gidv,id,dir){
+  const g = state.groups.find(x=>x.id===gidv);
+  if(!g) return;
+  const i = g.majors.findIndex(x=>x.id===id);
+  const j = i+dir;
+  if(i<0||j<0||j>=g.majors.length) return;
+  [g.majors[i],g.majors[j]] = [g.majors[j],g.majors[i]];
+  /* notify when crossing the priority/backup boundary (index 5↔6) */
+  if((i===5&&j===6)||(i===6&&j===5)){
+    toast(j<6?'已移入前6（参与投档）':'已移出前6（变为备选）');
+  }
+  render();
+  if(document.body.classList.contains('view-mode')) renderViewDoc();
+}
+
+/* ---------- helpers ---------- */
+function setVal(id,v){ document.getElementById(id).value=v; }
+function val(id){ return document.getElementById(id).value; }
+function setRadio(name,v){ document.querySelectorAll(`input[name="${name}"]`).forEach(r=> r.checked = r.value===v ); }
+function getRadio(name){ const r = document.querySelector(`input[name="${name}"]:checked`); return r? r.value : ''; }
+function closeOverlay(id){ document.getElementById(id).classList.remove('show'); }
+
+/* ---------- drag & drop (SortableJS + fallback) ---------- */
+function initSortables(){
+  if(typeof Sortable==='undefined') return;
+  // groups
+  const list = document.getElementById('vlist');
+  if(list && !list.dataset.sortInit){
+    Sortable.create(list,{
+      handle:'.gdrag', animation:180, ghostClass:'sortable-ghost', chosenClass:'sortable-chosen',
+      dragClass:'group dragging',
+      onEnd(e){
+        if(e.oldIndex===e.newIndex) return;
+        const item = state.groups.splice(e.oldIndex,1)[0];
+        state.groups.splice(e.newIndex,0,item);
+        render();
+      }
+    });
+    list.dataset.sortInit='1';
+  }
+  // majors within each group
+  document.querySelectorAll('.mlist').forEach(ml=>{
+    if(ml.dataset.sortInit) return;
+    ml.dataset.sortInit='1';
+    const gidv = ml.dataset.majors;
+    Sortable.create(ml,{
+      handle:'.mdrag', animation:150, ghostClass:'sortable-ghost',
+      onEnd(e){
+        const g = state.groups.find(x=>x.id===gidv);
+        if(!g) return;
+        const item = g.majors.splice(e.oldIndex,1)[0];
+        g.majors.splice(e.newIndex,0,item);
+        render();
+      }
+    });
+  });
+}
+
+/* ---------- export / import ---------- */
+function exportData(){
+  const out = {
+    student: state.student,
+    groups: state.groups.map(g=>({
+      schoolCode:g.schoolCode, schoolName:g.schoolName, groupCode:g.groupCode,
+      groupName:g.groupName, planType:g.planType, groupEnrollment:g.groupEnrollment,
+      strategy:g.strategy, obeyAdjust:g.obeyAdjust, hidden:g.hidden,
+      config:g.config||{},
+      majors:g.majors.map(m=>({code:m.code,name:m.name,enrollment:m.enrollment,history:m.history,note:m.note}))
+    }))
+  };
+  const blob = new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `河南2026志愿草表_${state.student.score}分_${dateStr()}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  toast('已导出 JSON 文件');
+}
+function dateStr(){ const d=new Date(); return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}` }
+function pad(n){ return String(n).padStart(2,'0') }
+
+function openImportModal(){
+  document.getElementById('importText').value='';
+  document.getElementById('importFile').value='';
+  document.getElementById('importOverlay').classList.add('show');
+}
+function doImport(){
+  const file = document.getElementById('importFile').files[0];
+  const mode = getRadio('importMode') || 'replace';
+  if(file){
+    const reader = new FileReader();
+    reader.onload = e=>{ try{ applyImport(e.target.result, mode); }catch(err){ toast('文件解析失败：'+err.message,'err'); } };
+    reader.readAsText(file,'utf-8');
+  }else{
+    const txt = document.getElementById('importText').value.trim();
+    if(!txt){ toast('请粘贴 JSON 或选择文件','err'); return; }
+    try{ applyImport(txt, mode); }catch(err){ toast('JSON 解析失败：'+err.message,'err'); }
+  }
+}
+function applyImport(txt, mode){
+  const data = JSON.parse(txt);
+  let groups;
+  if(Array.isArray(data)) groups = data;
+  else if(data && Array.isArray(data.groups)) groups = data.groups;
+  else throw new Error('未找到 groups 数组');
+  // normalize
+  const norm = groups.map((g,i)=>{
+    if(!g.schoolCode || !g.schoolName || !g.groupCode) throw new Error(`第 ${i+1} 组缺少必填字段(院校代码/名称/专业组代码)`);
+    return {
+      id:gid(), schoolCode:String(g.schoolCode), schoolName:String(g.schoolName),
+      groupCode:String(g.groupCode), groupName:String(g.groupName||''),
+      planType:g.planType||'普通组', groupEnrollment:g.groupEnrollment!=null?String(g.groupEnrollment):'',
+      strategy:g.strategy||'', obeyAdjust:g.obeyAdjust!==false,
+      hidden:g.hidden===true,
+      config:normalizeConfig(g.config),
+      majors:(Array.isArray(g.majors)?g.majors:[]).map(m=>({
+        id:gid(), code:String(m.code), name:String(m.name),
+        enrollment:m.enrollment!=null?String(m.enrollment):'',
+        history:Array.isArray(m.history)?m.history.map(h=>({year:String(h.year||''),rank:String(h.rank||''),score:String(h.score||'')})):[],
+        note:m.note!=null?String(m.note):''
+      }))
+    };
+  });
+  if(mode==='append') state.groups = state.groups.concat(norm);
+  else state.groups = norm;
+  if(data && data.student) state.student = Object.assign(state.student, data.student);
+  closeOverlay('importOverlay');
+  render();
+  toast(`成功导入 ${norm.length} 个志愿组`);
+}
+
+/* ---------- format modal content ---------- */
+const FMT_JSON = `{
+  "student": {
+    "score": 657,
+    "rank": 3471,
+    "subject": "物理",
+    "province": "河南",
+    "year": 2026
+  },
+  "groups": [
+    {
+      "schoolCode": "1485",
+      "schoolName": "北京航空航天大学",
+      "groupCode": "G01",
+      "groupName": "高校专项计划组",
+      "planType": "高校专项计划",
+      "groupEnrollment": "",
+      "strategy": "冲",
+      "obeyAdjust": true,
+      "hidden": false,
+      "config": {
+        "history": [
+          { "year": "2025", "rank": "3000", "score": "651" },
+          { "year": "2024", "rank": "3200", "score": "648" },
+          { "year": "2023", "rank": "3400", "score": "645" }
+        ],
+        "note": "高校专项计划，需农村户籍资格"
+      },
+      "majors": [
+        { "code": "18", "name": "理科实验班（数学、统计、信息安全等）", "enrollment": "", "history": [{"year":"2025","rank":"3000","score":"651"},{"year":"2024","rank":"3200","score":"648"}], "note": "色盲限报" },
+        { "code": "17", "name": "工科试验班（具身智能、机械等）", "enrollment": "", "history": [], "note": "" }
+      ]
+    },
+    {
+      "schoolCode": "1165",
+      "schoolName": "南开大学",
+      "groupCode": "101",
+      "groupName": "普通组",
+      "planType": "普通组",
+      "groupEnrollment": "",
+      "strategy": "稳",
+      "obeyAdjust": true,
+      "hidden": false,
+      "config": {
+        "history": [
+          { "year": "2025", "rank": "4000", "score": "648" },
+          { "year": "2024", "rank": "4200", "score": "645" },
+          { "year": "2023", "rank": "4400", "score": "642" }
+        ],
+        "note": "稳妥选择，位次优势明显"
+      },
+      "majors": [
+        { "code": "03", "name": "卓越", "enrollment": "" },
+        { "code": "07", "name": "数学与大数据", "enrollment": "" }
+      ]
+    }
+  ]
+}`;
+
+const FMT_PROMPT = `请帮我生成河南2026新高考物理类志愿草表的JSON数据，用于导入志愿表工具。
+
+要求：
+1. 严格输出 JSON，不要 markdown 代码块包裹，不要任何解释文字。
+2. 顶层结构为 { "student": {...}, "groups": [ ... ] }。
+3. 考生信息：score=657, rank=3471, subject="物理", province="河南", year=2026。
+4. 每个专业组(group)包含字段：
+   schoolCode(院校代码,字符串), schoolName(院校名称), groupCode(专业组代码),
+   groupName(专业组名称), planType(计划类型:普通组/国家专项计划/高校专项计划/地方专项计划/中外合作办学/定向就业/预科班/其他),
+   groupEnrollment(组招生人数,字符串,未知填""), strategy(冲稳保: "冲"/"稳"/"保"/""),
+   obeyAdjust(是否服从调剂,布尔), hidden(是否隐藏,布尔,false=显示,true=隐藏在查看模式中标灰显示且不参与序号),
+   config(配置对象), majors(专业数组,前6个参与投档,可超出6个作为备选)。
+5. config 对象包含（均可选，未知填""）：
+   history(近三年录取参考数组,每项含year/rank/score,如[{"year":"2025","rank":"3000","score":"651"},{"year":"2024","rank":"3200","score":"648"}],无数据填[]),
+   note(备注/特殊要求)。
+6. 每个专业(major)包含：code(专业代码), name(专业名称), enrollment(专业招生人数,字符串,未知填""), history(该专业近三年录取参考数组,格式同config.history,无数据填[]可选), note(专业备注/特殊要求,字符串,可选)。
+7. groups 数组顺序即为志愿顺序，请按"冲→稳→保"排列。
+8. 请尽量填写 config 中的 history 数组（近三年录取位次），系统会自动取最近一年位次与考生位次3471对比分析冲稳保风险。
+9. 请根据我的分数657、位次3471推荐合适的院校专业组。
+
+我的偏好：[在此填写你的院校/专业偏好]`;
+
+function openFormatModal(){
+  document.getElementById('formatOverlay').classList.add('show');
+  // syntax highlight
+  document.getElementById('fmtJSONcode').innerHTML = hlJSON(FMT_JSON);
+  document.getElementById('fmtPromptCode').textContent = FMT_PROMPT;
+}
+function fmtTab(id,btn){
+  document.querySelectorAll('.fmt-tabs button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['fmtJSON','fmtFields','fmtPrompt'].forEach(x=> document.getElementById(x).style.display = x===id?'block':'none');
+}
+function hlJSON(s){
+  return esc(s)
+    .replace(/(&quot;[^&]*?&quot;)(\s*:)/g,'<span class="k">$1</span>$2')
+    .replace(/:\s*(&quot;[^&]*?&quot;)/g,': <span class="s">$1</span>')
+    .replace(/:\s*(true|false|null)/g,': <span class="n">$1</span>')
+    .replace(/:\s*(-?\d+\.?\d*)/g,': <span class="n">$1</span>');
+}
+function copyCode(btn){
+  const txt = btn.parentElement.innerText.replace('复制','').trim();
+  navigator.clipboard.writeText(txt).then(()=>{ btn.textContent='已复制'; setTimeout(()=>btn.textContent='复制',1500); });
+}
+
+/* ---------- toast ---------- */
+function toast(msg,type){
+  const w = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className = 'toast'+(type?' '+type:'');
+  t.textContent = msg;
+  w.appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateY(10px)'; t.style.transition='all .3s'; setTimeout(()=>t.remove(),300); }, 2400);
+}
+
+/* ---------- file input quick ---------- */
+document.getElementById('importFile').addEventListener('change',function(){
+  if(this.files[0]) document.getElementById('importText').placeholder = '已选择文件：'+this.files[0].name+'，点击「执行导入」即可';
+});
+
+/* ---------- view mode ---------- */
+function toggleViewMode(){
+  const isView = document.body.classList.toggle('view-mode');
+  if(isView){
+    renderViewDoc();
+    document.getElementById('btnViewMode').textContent = '';
+    window.scrollTo(0,0);
+    toast('已切换到查看模式');
+  }else{
+    document.getElementById('btnViewMode').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 查看模式';
+    toast('已返回编辑模式');
+  }
+}
+
+function vdStratClass(s){ return s==='冲'?'strat-rush':s==='稳'?'strat-stable':s==='保'?'strat-protect':'' }
+
+function renderViewDoc(){
+  const doc = document.getElementById('viewDoc');
+  const s = state.student;
+  const groups = state.groups;
+  const activeGroups = groups.filter(g=>g.hidden!==true);
+  const hiddenGroups = groups.filter(g=>g.hidden===true);
+  const totalMajors = activeGroups.reduce((a,g)=>a+g.majors.length,0);
+  let html = `
+    <div class="vd-header">
+      <div class="vd-seal">志</div>
+      <h1>河南省${s.year}年普通高校招生志愿草表</h1>
+      <div class="vd-sub">PHYSICS TRACK · VOLUNTEER DRAFT · 物理 ${s.province}</div>
+      <div class="vd-meta">
+        <div class="vd-meta-item"><div class="vd-meta-num gold">${s.score}</div><div class="vd-meta-lab">高考分数</div></div>
+        <div class="vd-meta-item"><div class="vd-meta-num">${s.rank}</div><div class="vd-meta-lab">全省位次</div></div>
+        <div class="vd-meta-item"><div class="vd-meta-num" style="font-size:18px">${s.subject}</div><div class="vd-meta-lab">首选科目</div></div>
+        <div class="vd-meta-item"><div class="vd-meta-num">${activeGroups.length}</div><div class="vd-meta-lab">志愿组数</div></div>
+        <div class="vd-meta-item"><div class="vd-meta-num">${totalMajors}</div><div class="vd-meta-lab">专业总数</div></div>
+      </div>
+    </div>`;
+
+  let seq = 0;
+  groups.forEach((g)=>{
+    const isHidden = g.hidden===true;
+    if(!isHidden) seq++;
+    const groupNum = isHidden ? '—' : seq;
+    const isSpecial = g.planType && g.planType!=='普通组';
+    const cfg = normalizeConfig(g.config||{});
+    const hist = cfg.history||[];
+    const hasHist = hist.length>0;
+    const ra = rankAnalysis(cfg);
+    const tags = [];
+    if(isHidden) tags.push(`<span class="vd-gtag vd-gtag-hidden">已隐藏</span>`);
+    if(g.planType) tags.push(`<span class="vd-gtag plan">${esc(g.planType)}</span>`);
+    if(g.groupEnrollment) tags.push(`<span class="vd-gtag enr">招 ${esc(g.groupEnrollment)} 人</span>`);
+    tags.push(g.obeyAdjust ? `<span class="vd-gtag adjust">服从调剂</span>` : `<span class="vd-gtag adjust-no">不服从调剂</span>`);
+    if(g.strategy) tags.push(`<span class="vd-gtag ${vdStratClass(g.strategy)}">${g.strategy}</span>`);
+    tags.push(`<span class="vd-gtag">专业 ${Math.min(6,g.majors.length)}/6${g.majors.length>6?` +${g.majors.length-6}备选`:''}</span>`);
+
+    const raHtml = ra ? `
+      <div class="vd-gra ${ra.type}">
+        <span class="vd-gra-label">位次分析</span>
+        <span class="vd-gra-val ${ra.type}">${ra.label}</span>
+        <span class="vd-gra-label" style="margin-top:2px">${ra.desc}</span>
+      </div>` : `<div class="vd-gra"><span class="vd-gra-label">位次分析</span><span class="vd-gra-val" style="color:var(--muted)">未填写</span></div>`;
+
+    const majorRows = g.majors.slice(0,6).map(m=>{
+      const mh = m.history||[];
+      const hasMH = mh.length>0;
+      const mhHtml = hasMH ? mh.map(h=>{
+        const yr = h.year?esc(h.year)+'：':'';
+        const parts = [];
+        if(h.rank) parts.push('位次 '+esc(h.rank));
+        if(h.score) parts.push(esc(h.score)+'分');
+        return yr+parts.join(' ');
+      }).join('　') : '';
+      const noteHtml = m.note ? `<div class="vd-mnote">${esc(m.note)}</div>` : '';
+      const histCell = hasMH ? mhHtml : (m.note ? '' : '—');
+      return `
+      <tr>
+        <td class="vd-mcode">${esc(m.code)}</td>
+        <td class="vd-mname">${esc(m.name)}</td>
+        <td class="vd-menr ${m.enrollment?'':'empty'}">${m.enrollment?'招 '+esc(m.enrollment)+' 人':'—'}</td>
+        <td class="vd-mhist ${hasMH||m.note?'':'empty'}">${histCell}${noteHtml}</td>
+      </tr>`;
+    }).join('');
+    const backupCount = Math.max(0, g.majors.length-6);
+    const backupRow = backupCount>0 ? `<tr class="vd-mbackup"><td colspan="4">另有 ${backupCount} 个备选专业未显示（仅前6个参与投档）</td></tr>` : '';
+
+    const histRows = hasHist ? hist.map(h=>`<tr><td class="h-year">${esc(h.year)||'—'}</td><td class="h-rank">${h.rank?esc(h.rank):'—'}</td><td class="h-score">${h.score?esc(h.score):'—'}</td></tr>`).join('') : '';
+    const hasCfg = hasHist || cfg.note;
+    const cfgHtml = hasCfg ? `
+      <div class="vd-cfg">
+        ${hasHist?`<div class="vd-cfg-item full">
+          <div class="vd-cfg-label">近三年录取参考</div>
+          <table class="vd-hist-tbl">
+            <thead><tr><th>年份</th><th>最低位次</th><th>最低分</th></tr></thead>
+            <tbody>${histRows}</tbody>
+          </table>
+        </div>`:''}
+        ${cfg.note?`<div class="vd-cfg-item full"><div class="vd-cfg-label">备注</div><div class="vd-cfg-value note">${esc(cfg.note)}</div></div>`:''}
+      </div>` : '';
+
+    html += `
+      <div class="vd-group${isHidden?' vd-group-hidden':''}">
+        <div class="vd-group-head">
+          <div class="vd-gnum ${isSpecial?'special':''}${isHidden?' hidden':''}">${groupNum}</div>
+          <div class="vd-ginfo">
+            <div class="vd-gschool">
+              <span class="code">${esc(g.schoolCode)}</span>
+              <span class="name">${esc(g.schoolName)}</span>
+              <span class="gcode">${esc(g.groupCode)}</span>
+              ${g.groupName?`<span class="name" style="font-weight:400;font-size:14px;color:var(--ink-soft)">· ${esc(g.groupName)}</span>`:''}
+            </div>
+            <div class="vd-gtags">${tags.join('')}</div>
+          </div>
+          ${raHtml}
+        </div>
+        <div class="vd-mtable-wrap">
+        <table class="vd-mtable">
+          <thead><tr><th>专业代码</th><th>专业名称（组内顺序即优先级）</th><th style="text-align:center">招生人数</th><th>专业录取参考</th></tr></thead>
+          <tbody>${majorRows}${backupRow}</tbody>
+        </table>
+        </div>
+        ${cfgHtml}
+      </div>`;
+  });
+
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  html += `
+    <div class="vd-footer">
+      <span>本表为志愿草表，正式填报请登录 pzwb.haeea.cn</span>
+      <span class="vd-gen">生成于 ${dateStr} · 共 ${activeGroups.length} 组 ${totalMajors} 个专业${hiddenGroups.length>0?`（另有 ${hiddenGroups.length} 组已隐藏，不参与投档）`:''}</span>
+    </div>`;
+  doc.innerHTML = html;
+}
+
+/* ---------- export image / pdf ---------- */
+async function captureViewDoc(){
+  const el = document.getElementById('viewDoc');
+  const canvas = await html2canvas(el,{
+    scale:2, backgroundColor:'#ffffff', useCORS:true,
+    windowWidth: el.scrollWidth, windowHeight: el.scrollHeight
+  });
+  return canvas;
+}
+
+async function exportImage(){
+  if(!document.body.classList.contains('view-mode')){ toast('请先切换到查看模式','err'); return; }
+  toast('正在生成图片...');
+  try{
+    const canvas = await captureViewDoc();
+    canvas.toBlob(blob=>{
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `河南2026志愿草表_${state.student.score}分_${dateStr()}.png`;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+      toast('图片已导出');
+    },'image/png');
+  }catch(e){ toast('导出失败：'+e.message,'err'); }
+}
+
+function exportPDF(){
+  if(!document.body.classList.contains('view-mode')){ toast('请先切换到查看模式','err'); return; }
+  toast('正在调用浏览器打印...');
+  /* use native browser print → save as PDF (vector, selectable text) */
+  if(typeof window.print === 'function'){
+    /* small delay so toast is visible before print dialog blocks */
+    setTimeout(()=>{ window.print(); }, 200);
+    return;
+  }
+  /* fallback: jsPDF + html2canvas (rasterized) */
+  toast('浏览器不支持打印，退回图片转PDF...');
+  exportPDFfallback();
+}
+
+async function exportPDFfallback(){
+  if(!document.body.classList.contains('view-mode')){ toast('请先切换到查看模式','err'); return; }
+  toast('正在生成 PDF（备用方案）...');
+  try{
+    const el = document.getElementById('viewDoc');
+    const canvas = await html2canvas(el,{
+      scale:2, backgroundColor:'#ffffff', useCORS:true,
+      windowWidth: el.scrollWidth, windowHeight: el.scrollHeight
+    });
+    const { jsPDF } = window.jspdf;
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const pdfW = 210; // A4 width mm
+    const pdfH = 297;
+    const imgW = pdfW - 20; // margin 10mm each side
+    const imgH = canvas.height * imgW / canvas.width;
+    const pdf = new jsPDF('p','mm','a4');
+    if(imgH <= pdfH - 20){
+      pdf.addImage(imgData,'JPEG',10,10,imgW,imgH);
+    }else{
+      // multi-page
+      let remaining = imgH;
+      let offset = 0;
+      const pageContentH = pdfH - 20;
+      while(remaining > 0){
+        pdf.addImage(imgData,'JPEG',10,10-offset,imgW,imgH);
+        remaining -= pageContentH;
+        if(remaining > 0){ pdf.addPage(); offset += pageContentH; }
+      }
+    }
+    pdf.save(`河南2026志愿草表_${state.student.score}分_${dateStr()}.pdf`);
+    toast('PDF 已导出');
+  }catch(e){ toast('导出失败：'+e.message,'err'); }
+}
+
+/* ---------- init ---------- */
+window.addEventListener('afterprint', ()=>{
+  toast('打印完成');
+});
+
+async function init(){
+  // 先加载本地数据作为初始值
+  state = loadLocal();
+
+  // 检测服务器是否可达
+  let serverReachable = false;
+  try{
+    const resp = await fetch(API + '/api/check');
+    serverReachable = true;
+    if(resp.ok){
+      const j = await resp.json();
+      if(j.authenticated === true){
+        // 已有有效 session → 从服务器加载最新数据
+        const serverData = await loadFromServer();
+        if(serverData !== null){
+          state = serverData;
+          serverAvailable = true;
+          saveLocal(state);
+        }
+        document.getElementById('loginOverlay').style.display = 'none';
+        render();
+        startSyncPolling();
+        updateSyncStatus(true);
+        return;
+      }
+    }
+  }catch(e){
+    // 服务器不可达
+    serverReachable = false;
+  }
+
+  if(serverReachable){
+    // 服务器可达但未登录 → 显示登录遮罩，等待密码验证
+    updateSyncStatus(false);
+    // 不渲染数据，等登录成功后再加载
+  }else{
+    // 服务器不可达 → 离线模式，直接使用本地数据
+    document.getElementById('loginOverlay').style.display = 'none';
+    render();
+    updateSyncStatus(false);
+    toast('服务器未连接，使用本地数据（离线模式）');
+  }
+}
+
+init();
+</script>
+</body>
+</html>
