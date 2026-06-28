@@ -312,11 +312,16 @@ func handlePostData(w http.ResponseWriter, r *http.Request) {
 
 func handleStatic(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/" || r.URL.Path == "/volunteer_form.html" {
-		// 设置 no-cache 避免浏览器缓存旧版本
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.Header().Set("Pragma", "no-cache")
 		w.Header().Set("Expires", "0")
 		http.ServeFile(w, r, "volunteer_form.html")
+		return
+	}
+	// 静态文件（data/, tools/ 等）
+	path := "." + r.URL.Path
+	if _, err := os.Stat(path); err == nil {
+		http.ServeFile(w, r, path)
 		return
 	}
 	http.NotFound(w, r)

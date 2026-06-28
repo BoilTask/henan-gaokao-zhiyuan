@@ -10,6 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="data/score_rank_map.js"></script>
 <style>
 :root{
   --paper:#F4EFE4;
@@ -1846,7 +1847,7 @@ async function fetchScoresFromAPI(){
     }catch(e){}
   }
 
-  // 筛选物理/理科，计算最低分
+  // 筛选物理/理科，计算最低分 + 换算位次
   const scoreMap = {};
   for(const [year, records] of Object.entries(results)){
     // 筛选物理或理科记录
@@ -1858,8 +1859,12 @@ async function fetchScoresFromAPI(){
     // 找最低分（有分数的最小值）
     const scores = filtered.map(r=>parseInt(r.admission_score_min)).filter(s=>!isNaN(s));
     if(scores.length===0) continue;
+    const minScore = Math.min(...scores);
+    // 用一分一段表换算位次
+    const rank = (typeof scoreToRank==='function') ? scoreToRank(minScore, year) : null;
     scoreMap[year] = {
-      score: String(Math.min(...scores)),
+      score: String(minScore),
+      rank: rank ? String(rank) : '',
       count: filtered.length,
       groups: [...new Set(filtered.map(r=>r.major_group_code).filter(Boolean))]
     };
@@ -1872,7 +1877,7 @@ async function fetchScoresFromAPI(){
     if(i>=3) return;
     const d = scoreMap[year];
     setVal('g_hist_year_'+i, year);
-    setVal('g_hist_rank_'+i, '');
+    setVal('g_hist_rank_'+i, d.rank||'');
     setVal('g_hist_score_'+i, d.score);
     filled++;
   });
@@ -1891,7 +1896,8 @@ async function fetchScoresFromAPI(){
     const parts = sortedYears.map(y=>{
       const d = scoreMap[y];
       const grpInfo = d.groups.length>0 ? ' 专业组:'+d.groups.join(',') : '';
-      return y+'年 最低'+d.score+'分 ('+d.count+'条记录'+grpInfo+')';
+      const rankInfo = d.rank ? ' 位次'+d.rank : '';
+      return y+'年 最低'+d.score+'分'+rankInfo+' ('+d.count+'条记录'+grpInfo+')';
     });
     statusEl.textContent = '已获取 '+filled+' 年：'+parts.join('；');
     document.getElementById('cfgFieldset').classList.add('open');
