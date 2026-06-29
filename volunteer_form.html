@@ -579,13 +579,14 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
     margin-top:16px; padding-top:10px;
   }
 
-  /* === strategy section page breaks === */
-  
-
   /* === print color preservation === */
-  .vd-gnum,.vd-seal,.vd-gra{
+  .vd-gnum,.vd-seal,.vd-gra,.vd-summary-tbl td,.vd-summary-tbl th{
     -webkit-print-color-adjust:exact; print-color-adjust:exact;
   }
+
+  /* === summary table print === */
+  .vd-summary{break-before:page;page-break-before:always}
+  .vd-summary-tbl tbody.sbody-group{break-inside:avoid;page-break-inside:avoid}
 
   /* === print font sizing === */
   .vd-header h1{font-size:22px}
@@ -777,6 +778,60 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
 }
 .vd-footer .vd-gen{font-family:"SFMono-Regular",monospace}
 
+/* ---------- summary table ---------- */
+.vd-summary{margin-top:40px;break-before:page;page-break-before:always}
+.vd-summary-title{
+  font-family:var(--serif);font-weight:700;font-size:20px;
+  text-align:center;margin-bottom:18px;color:var(--ink);
+  letter-spacing:2px;
+}
+.vd-summary-tbl{
+  width:100%;border-collapse:collapse;font-size:12px;
+  border:1.5px solid var(--ink);
+}
+.vd-summary-tbl thead{display:table-header-group}
+.vd-summary-tbl th{
+  background:#F5F2EA;font-size:10.5px;font-weight:600;color:var(--ink-soft);
+  letter-spacing:.3px;padding:7px 6px;border:1px solid var(--line);
+  text-align:center;vertical-align:middle;
+}
+.vd-summary-tbl td{
+  padding:7px 6px;border:1px solid var(--line-soft);vertical-align:middle;
+  color:var(--ink);line-height:1.35;
+}
+/* group columns */
+.vd-summary-tbl .vs-seq{
+  width:32px;text-align:center;font-family:var(--display);font-weight:700;font-size:13px;
+}
+.vd-summary-tbl .vs-code{width:52px;text-align:center;font-family:var(--display);font-weight:600;font-size:12px}
+.vd-summary-tbl .vs-name{text-align:left;min-width:110px;font-weight:500}
+.vd-summary-tbl .vs-gcode{width:48px;text-align:center;font-family:var(--display);font-weight:600;color:var(--gold)}
+.vd-summary-tbl .vs-plan{width:68px;text-align:center;font-size:11.5px;font-weight:500}
+/* major columns */
+.vd-summary-tbl .vs-mseq{
+  width:28px;text-align:center;font-family:var(--display);font-weight:600;
+  font-size:11.5px;color:var(--gold);
+}
+.vd-summary-tbl .vs-mcode{
+  width:36px;text-align:center;font-family:var(--display);font-weight:600;
+  font-size:12px;color:var(--ink-soft);
+}
+.vd-summary-tbl .vs-mname{text-align:left;min-width:90px;font-size:12px}
+.vd-summary-tbl .vs-empty{color:var(--muted)}
+/* strategy row backgrounds */
+.vd-summary-tbl tr.srow-rush{background:#FBF4E6}
+.vd-summary-tbl tr.srow-stable{background:#D7E8E5}
+.vd-summary-tbl tr.srow-protect{background:#DCEAD9}
+/* alternating row for no-strategy groups */
+.vd-summary-tbl tr.srow-alt{background:#F8F7F4}
+/* group separator */
+.vd-summary-tbl tr.srow-sep td{
+  border-top:2px solid var(--ink);padding-top:9px;
+}
+.vd-summary-tbl tr.srow-sep-first td{border-top:none}
+/* group rows: avoid page break inside */
+.vd-summary-tbl tbody.sbody-group{page-break-inside:avoid;break-inside:avoid}
+
 @media(max-width:760px){
   .vd-cfg{grid-template-columns:1fr 1fr}
   .vd-group-head{flex-wrap:wrap}
@@ -903,6 +958,21 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
   .vd-hist-tbl{font-size:11px}
   .vd-hist-tbl th,.vd-hist-tbl td{padding:4px 6px}
   .vd-footer{flex-direction:column;gap:6px;text-align:center;font-size:10px;margin-top:24px;padding-top:14px}
+  /* summary table on mobile */
+  .vd-summary{margin-top:28px;break-before:auto;page-break-before:auto}
+  .vd-summary-title{font-size:16px;letter-spacing:1px}
+  .vd-summary-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -1px}
+  .vd-summary-tbl{min-width:760px;font-size:10.5px}
+  .vd-summary-tbl th{font-size:9px;padding:4px 3px}
+  .vd-summary-tbl td{padding:5px 3px;font-size:10.5px}
+  .vd-summary-tbl .vs-seq{font-size:11px;width:26px}
+  .vd-summary-tbl .vs-code{font-size:10.5px;width:44px}
+  .vd-summary-tbl .vs-name{min-width:90px;font-size:10.5px}
+  .vd-summary-tbl .vs-gcode{font-size:11px;width:40px}
+  .vd-summary-tbl .vs-plan{font-size:10px;width:56px}
+  .vd-summary-tbl .vs-mseq{font-size:10px;width:22px}
+  .vd-summary-tbl .vs-mcode{font-size:10.5px;width:30px}
+  .vd-summary-tbl .vs-mname{min-width:72px;font-size:10.5px}
 }
 
 /* ---------- 登录遮罩 ---------- */
@@ -2789,6 +2859,78 @@ function renderViewDoc(){
         ${cfgHtml}
       </div>`;
   });
+
+  /* ---------- summary table ---------- */
+  const summaryGroups = groups.filter(g => g.hidden !== true);
+  if (summaryGroups.length > 0) {
+    const stratClassMap = { '冲': 'rush', '稳': 'stable', '保': 'protect' };
+    html += `
+    <div class="vd-summary">
+      <h2 class="vd-summary-title">志愿填报汇总表</h2>
+      <div class="vd-summary-tbl-wrap">
+      <table class="vd-summary-tbl">
+        <thead><tr>
+          <th>序号</th><th>院校代码</th><th>院校名称</th><th>组码</th><th>计划</th>
+          <th>序号</th><th>代码</th><th>专业名称</th>
+          <th>序号</th><th>代码</th><th>专业名称</th>
+          <th>序号</th><th>代码</th><th>专业名称</th>
+        </tr></thead>`;
+
+    summaryGroups.forEach((g, gi) => {
+      const seq = gi + 1;
+      const strat = g.strategy || '';
+      const stratCls = stratClassMap[strat] || '';
+      const planLabel = g.planType || '—';
+      const majors = g.majors || [];
+      const row1m = majors.slice(0, 3);
+      const row2m = majors.slice(3, 6);
+      const hasRow2 = row2m.length > 0;
+      const rowSpan = hasRow2 ? ' rowspan="2"' : '';
+      // row background class
+      const rowBg = stratCls ? 'srow-'+stratCls : (gi%2===1 ? 'srow-alt' : '');
+      const isFirst = gi === 0;
+
+      function majorTds(ms, startIdx) {
+        let tds = '';
+        for (let i = 0; i < 3; i++) {
+          if (i < ms.length) {
+            const m = ms[i];
+            tds += `<td class="vs-mseq">${startIdx + i + 1}</td>`;
+            tds += `<td class="vs-mcode">${esc(m.code)}</td>`;
+            tds += `<td class="vs-mname">${esc(m.name)}</td>`;
+          } else {
+            tds += `<td class="vs-empty">—</td><td class="vs-empty">—</td><td class="vs-empty">—</td>`;
+          }
+        }
+        return tds;
+      }
+
+      const sepClass = isFirst ? 'srow-sep-first' : 'srow-sep';
+      html += `
+        <tbody class="sbody-group"><tr class="${rowBg} ${sepClass}">
+          <td class="vs-seq"${rowSpan}>${seq}</td>
+          <td class="vs-code"${rowSpan}>${esc(g.schoolCode)}</td>
+          <td class="vs-name"${rowSpan}>${esc(g.schoolName)}</td>
+          <td class="vs-gcode"${rowSpan}>${esc(g.groupCode)}</td>
+          <td class="vs-plan"${rowSpan}>${esc(planLabel)}</td>
+          ${majorTds(row1m, 0)}
+        </tr>`;
+
+      if (hasRow2) {
+        html += `
+        <tr class="${rowBg}">
+          ${majorTds(row2m, 3)}
+        </tr>`;
+      }
+
+      html += `</tbody>`;
+    });
+
+    html += `
+      </table>
+      </div>
+    </div>`;
+  }
 
   const now = new Date();
   const dateStr = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
