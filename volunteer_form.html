@@ -1640,7 +1640,7 @@ async function afterLogin(){
     saveToServer(state);
     serverAvailable = true;
   }
-  render();
+  render(true);  // 数据来自服务器，无需再保存
   startSyncPolling();
   updateSyncStatus(true);
   checkViewParam();
@@ -1713,7 +1713,7 @@ function startSyncPolling(){
         // 服务器有新数据 → 更新本地
         state = serverData;
         saveLocal(state);
-        render();
+        render(true);  // 数据来自服务器，无需再回存
         if(document.body.classList.contains('view-mode')) renderViewDoc();
         updateSyncStatus(true);
       }
@@ -1843,7 +1843,7 @@ const IC = {
 };
 
 /* ---------- render ---------- */
-function render(){
+function render(skipSave){
   const list = document.getElementById('vlist');
   list.innerHTML = '';
   if(!state.groups.length){
@@ -1853,7 +1853,7 @@ function render(){
   }
   updateStats();
   initSortables();
-  saveState();
+  if(!skipSave) saveState();
 }
 
 function stratClass(s){ return s==='冲'?'strat-rush':s==='稳'?'strat-stable':s==='保'?'strat-protect':'' }
@@ -2477,7 +2477,6 @@ function toggleHidden(id){
   const g = state.groups.find(x=>x.id===id);
   if(!g) return;
   g.hidden = g.hidden===true ? false : true;
-  saveState();
   render();
   if(document.body.classList.contains('view-mode')) renderViewDoc();
   toast(g.hidden===true ? '已隐藏（查看模式中标灰显示，不参与序号）' : '已显示');
@@ -3172,7 +3171,7 @@ async function init(){
           saveLocal(state);
         }
         document.getElementById('loginOverlay').style.display = 'none';
-        render();
+        render(true);  // 数据来自服务器，无需再保存
         startSyncPolling();
         updateSyncStatus(true);
         checkViewParam();
@@ -3192,7 +3191,7 @@ async function init(){
   }else{
     // 服务器不可达 → 离线模式，直接使用本地数据
     document.getElementById('loginOverlay').style.display = 'none';
-    render();
+    render(true);  // 离线模式，本地数据已在 loadLocal 加载
     updateSyncStatus(false);
     checkViewParam();
     toast('服务器未连接，使用本地数据（离线模式）');
