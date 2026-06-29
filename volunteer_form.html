@@ -526,23 +526,147 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
 
 /* ---------- print: browser native PDF ---------- */
 @media print{
-  body{background:#fff !important;font-size:11pt}
+  body{background:#fff !important;font-size:10pt;line-height:1.45}
   body *{visibility:hidden}
   body.view-mode .view-doc,
   body.view-mode .view-doc *{visibility:visible}
   .view-doc{position:absolute;left:0;top:0;width:100%;padding:0;margin:0;display:block !important;animation:none}
   .view-toolbar,.topbar,.rules,.toolbar,.vlist,.foot-note{display:none !important}
   .wrap{max-width:none;margin:0;padding:0}
-  /* page break between groups */
-  .vd-group{page-break-inside:avoid;break-inside:avoid}
-  .vd-header{page-break-after:avoid;break-after:avoid}
-  .vd-footer{page-break-before:avoid;break-before:avoid;margin-top:20px}
-  /* colors: keep subtle but print-friendly */
-  .vd-gnum,.vd-seal{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  @page{margin:12mm 10mm}
+
+  /* === A4 page setup === */
+  @page{
+    margin:17mm 12mm 22mm 12mm;
+    size:A4 portrait;
+
+    @top-left{
+      content:"河南2026高考志愿草表";
+      font-family:"Noto Serif SC",serif;
+      font-size:8pt;color:#999;
+    }
+    @top-right{
+      content:"欧阳天柱 · 657分 · 3471位 · 物理类";
+      font-family:"Noto Sans SC",sans-serif;
+      font-size:7.5pt;color:#999;
+    }
+    @bottom-left{
+      content:"数据来源公开渠道，仅供参考 · 不构成录取承诺";
+      font-family:"Noto Sans SC",sans-serif;
+      font-size:7pt;color:#aaa;
+    }
+    @bottom-right{
+      content:"第 " counter(page) " 页 / 共 " counter(pages) " 页";
+      font-family:"Noto Sans SC",sans-serif;
+      font-size:8pt;color:#666;
+    }
+  }
+
+  /* === page break control === */
+  .vd-group{
+    break-inside:avoid; page-break-inside:avoid;
+    margin-bottom:6px; border:0.5px solid #ddd; border-radius:4px;
+  }
+  .vd-group-head{ break-after:avoid; page-break-after:avoid; }
+  .vd-mtable thead{ display:table-header-group; }
+  .vd-mtable tr{ break-inside:avoid; page-break-inside:avoid; }
+  .vd-cfg{ break-inside:avoid; page-break-inside:avoid; }
+  .vd-header{
+    break-after:avoid; page-break-after:avoid;
+    margin-bottom:14px; padding-bottom:14px;
+  }
+  .vd-footer{
+    break-before:avoid; page-break-before:avoid;
+    margin-top:16px; padding-top:10px;
+  }
+
+  /* === strategy section page breaks === */
+  
+
+  /* === print color preservation === */
+  .vd-gnum,.vd-seal,.vd-gra{
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+
+  /* === print font sizing === */
+  .vd-header h1{font-size:22px}
+  .vd-header .vd-meta-num{font-size:20px}
+  .vd-mtable th{font-size:8.5px;padding:4px 7px}
+  .vd-mtable td{font-size:9.5px;padding:5px 7px}
+  .vd-mtable .vd-mcode{font-size:10px}
+  .vd-mtable .vd-mname{font-size:10.5px}
+  .vd-mtable .vd-mhist{font-size:9px;max-width:200px}
+  .vd-ginfo .vd-gschool .name{font-size:13px}
+  .vd-ginfo .vd-gschool .code,.vd-ginfo .vd-gschool .gcode{font-size:11px}
+  .vd-ginfo .vd-gtag{font-size:9.5px;padding:1.5px 6px}
+  .vd-gra{padding:6px 14px;min-width:120px}
+  .vd-gra .vd-gra-label{font-size:8px}
+  .vd-gra .vd-gra-val{font-size:11px}
+  .vd-cfg{grid-template-columns:repeat(4,1fr)}
+  .vd-cfg-item{padding:5px 8px}
+  .vd-cfg-label{font-size:8.5px}
+  .vd-cfg-value{font-size:10.5px}
+  .vd-hist-tbl th,.vd-hist-tbl td{font-size:9px;padding:3px 6px}
+  .vd-disclaimer{
+    margin:0 0 14px; padding:10px 14px;
+    border-width:1px; font-size:8.5pt;
+  }
+  .vd-disclaimer-icon{font-size:24px}
+  .vd-disclaimer-body h3{font-size:11px; margin-bottom:8px}
+  .vd-disclaimer-grid{grid-template-columns:1fr 1fr; gap:6px 12px}
+  .vd-disclaimer-item{font-size:8.5px; line-height:1.4}
+  .vd-disclaimer-item strong{font-size:8.5px}
+  .vd-disclaimer-foot{font-size:8.5px; padding-top:6px}
+  .vd-footer{font-size:9px}
+
 }
 
 /* document header */
+
+
+
+/* ---------- risk disclaimer in view mode ---------- */
+.vd-disclaimer{
+  display:flex; gap:18px; align-items:flex-start;
+  margin:0 0 26px; padding:20px 22px;
+  background:linear-gradient(135deg,#FFFDF5,#FFF8E8);
+  border:1.5px solid #E8D5A0; border-left:5px solid #C9A24A;
+  border-radius:10px;
+}
+.vd-disclaimer-icon{
+  font-size:36px; flex:none; line-height:1;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.1));
+}
+.vd-disclaimer-body{flex:1;min-width:0}
+.vd-disclaimer-body h3{
+  font-family:var(--serif); font-weight:700; font-size:15px;
+  color:var(--gold); margin-bottom:14px;
+  letter-spacing:.3px;
+}
+.vd-disclaimer-grid{
+  display:grid; grid-template-columns:1fr 1fr; gap:10px 18px;
+  margin-bottom:12px;
+}
+.vd-disclaimer-item{
+  display:flex; flex-direction:column; gap:3px;
+  font-size:12px; line-height:1.55;
+}
+.vd-disclaimer-item strong{
+  font-size:11.5px; color:var(--ink-soft); letter-spacing:.3px;
+}
+.vd-disclaimer-item span{color:var(--ink-soft)}
+.vd-disclaimer-foot{
+  font-size:12px; color:var(--terra); line-height:1.6;
+  padding-top:10px; border-top:1px solid #F0E6CC;
+}
+.vd-disclaimer-foot b{color:var(--ink)}
+
+@media(max-width:760px){
+  .vd-disclaimer{flex-direction:column;gap:10px;padding:14px 16px}
+  .vd-disclaimer-icon{font-size:28px}
+  .vd-disclaimer-grid{grid-template-columns:1fr;gap:8px}
+  .vd-disclaimer-body h3{font-size:14px;margin-bottom:10px}
+}
+
 .vd-header{text-align:center;padding-bottom:24px;border-bottom:3px double var(--ink);margin-bottom:28px}
 .vd-header .vd-seal{
   display:inline-flex;align-items:center;justify-content:center;
@@ -557,7 +681,7 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
   border:1px solid var(--line);border-radius:8px;overflow:hidden;
 }
 .vd-header .vd-meta-item{
-  padding:10px 24px;text-align:center;border-right:1px solid var(--line);
+  padding:8px 20px;text-align:center;border-right:1px solid var(--line);
 }
 .vd-header .vd-meta-item:last-child{border-right:none}
 .vd-header .vd-meta-num{font-family:var(--display);font-weight:800;font-size:24px;color:var(--ink);line-height:1}
@@ -565,10 +689,15 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
 .vd-header .vd-meta-lab{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:5px}
 
 /* group entry in view mode */
+
+
+
+
 .vd-group{margin-bottom:22px;break-inside:avoid;page-break-inside:avoid}
 .vd-group-head{
   display:flex;align-items:stretch;border:1.5px solid var(--ink);
-  border-radius:6px;overflow:hidden;
+  border-radius:8px;overflow:hidden;
+  position:relative;
 }
 .vd-gnum{
   display:flex;align-items:center;justify-content:center;
@@ -597,11 +726,11 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
 .vd-ginfo .vd-gtag.adjust-no{background:var(--terra-soft);color:var(--terra)}
 .vd-gra{
   display:flex;align-items:center;justify-content:center;flex-direction:column;
-  padding:8px 14px;flex:none;border-left:1.5px solid var(--ink);
-  min-width:100px;
+  padding:8px 16px;flex:none;border-left:1.5px solid var(--ink);
+  min-width:140px;
 }
-.vd-gra .vd-gra-label{font-size:10px;color:var(--muted);letter-spacing:.5px}
-.vd-gra .vd-gra-val{font-family:var(--display);font-weight:700;font-size:14px;margin-top:2px}
+.vd-gra .vd-gra-label{font-size:10px;color:var(--muted);letter-spacing:.5px;white-space:nowrap}
+.vd-gra .vd-gra-val{font-family:var(--display);font-weight:700;font-size:14px;margin-top:2px;white-space:nowrap}
 .vd-gra.rush{background:#FBF4E6}
 .vd-gra.stable{background:var(--teal-soft)}
 .vd-gra.protect{background:var(--sage-soft)}
@@ -612,13 +741,13 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
 .vd-gra .vd-gra-val.warn{color:var(--terra)}
 
 /* major table in view mode */
-.vd-mtable{width:100%;border-collapse:collapse;margin-top:0;border:1px solid var(--line);border-top:none;border-radius:0 0 6px 6px;overflow:hidden}
+.vd-mtable{width:100%;border-collapse:collapse;margin-top:0;border:1px solid var(--line);border-top:none;border-radius:0 0 8px 8px;overflow:hidden}
 .vd-mtable th{
-  background:#F8F5EE;font-size:10.5px;font-weight:600;color:var(--muted);
-  letter-spacing:.5px;text-transform:uppercase;padding:8px 12px;
+  background:#F8F5EE;font-size:10px;font-weight:600;color:var(--muted);
+  letter-spacing:.4px;text-transform:uppercase;padding:6px 10px;
   border-bottom:1px solid var(--line);text-align:left;
 }
-.vd-mtable td{padding:9px 12px;font-size:13px;color:var(--ink);border-bottom:1px solid var(--line-soft)}
+.vd-mtable td{padding:7px 10px;font-size:12.5px;color:var(--ink);border-bottom:1px solid var(--line-soft)}
 .vd-mtable tr:last-child td{border-bottom:none}
 .vd-mtable .vd-mcode{font-family:var(--display);font-weight:700;color:var(--gold);width:50px;text-align:center}
 .vd-mtable .vd-mname{font-weight:500}
@@ -633,7 +762,7 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
   display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
   background:var(--line);border:1px solid var(--line);border-top:none;
 }
-.vd-cfg-item{background:#FAF7F0;padding:8px 12px}
+.vd-cfg-item{background:#FAF7F0;padding:6px 10px}
 .vd-cfg-item.full{grid-column:1/-1}
 .vd-cfg-label{font-size:10px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;font-weight:500}
 .vd-cfg-value{font-size:12.5px;color:var(--ink);margin-top:3px;font-weight:500}
@@ -2525,7 +2654,6 @@ function toggleViewMode(){
   }
 }
 
-function vdStratClass(s){ return s==='冲'?'strat-rush':s==='稳'?'strat-stable':s==='保'?'strat-protect':'' }
 
 function renderViewDoc(){
   const doc = document.getElementById('viewDoc');
@@ -2546,7 +2674,35 @@ function renderViewDoc(){
         <div class="vd-meta-item"><div class="vd-meta-num">${activeGroups.length}</div><div class="vd-meta-lab">志愿组数</div></div>
         <div class="vd-meta-item"><div class="vd-meta-num">${totalMajors}</div><div class="vd-meta-lab">专业总数</div></div>
       </div>
-    </div>`;
+    </div>
+
+    <!-- DATA RISK DISCLAIMER -->
+    <div class="vd-disclaimer">
+      <div class="vd-disclaimer-icon">⚠️</div>
+      <div class="vd-disclaimer-body">
+        <h3>重要提示：数据准确性及录取风险告知</h3>
+        <div class="vd-disclaimer-grid">
+          <div class="vd-disclaimer-item">
+            <strong>📊 数据来源</strong>
+            <span>本表专业录取数据来源于公开渠道（阳光高考、院校官网等），可能存在延迟或误差，不代表官方最终数据。</span>
+          </div>
+          <div class="vd-disclaimer-item">
+            <strong>📈 录取波动</strong>
+            <span>历年录取位次受报考人数、招生计划、政策调整等多因素影响，每年存在波动，历史数据仅作参考，无法精确预测当年结果。</span>
+          </div>
+          <div class="vd-disclaimer-item">
+            <strong>🎯 投档线≠专业线</strong>
+            <span>专业组投档线为院校公布的最低投档分，不代表组内各专业的实际录取线。热门专业录取位次可能显著高于投档线。</span>
+          </div>
+          <div class="vd-disclaimer-item">
+            <strong>⚠️ 概率性事件</strong>
+            <span>高考录取存在固有不确定性。即使位次匹配历史数据，仍存在滑档、退档风险。请综合考虑后审慎填报。</span>
+          </div>
+        </div>
+        <p class="vd-disclaimer-foot">本表为辅助参考工具，<b>不构成任何录取承诺</b>。正式填报请登录河南省教育考试院官方平台 <b>pzwb.haeea.cn</b> 进行操作。</p>
+      </div>
+    </div>
+`;
 
   let seq = 0;
   groups.forEach((g)=>{
@@ -2563,7 +2719,6 @@ function renderViewDoc(){
     if(g.planType) tags.push(`<span class="vd-gtag plan">${esc(g.planType)}</span>`);
     if(g.groupEnrollment) tags.push(`<span class="vd-gtag enr">招 ${esc(g.groupEnrollment)} 人</span>`);
     tags.push(g.obeyAdjust ? `<span class="vd-gtag adjust">服从调剂</span>` : `<span class="vd-gtag adjust-no">不服从调剂</span>`);
-    if(g.strategy) tags.push(`<span class="vd-gtag ${vdStratClass(g.strategy)}">${g.strategy}</span>`);
     tags.push(`<span class="vd-gtag">专业 ${Math.min(6,g.majors.length)}/6${g.majors.length>6?` +${g.majors.length-6}备选`:''}</span>`);
 
     const raHtml = ra ? `
