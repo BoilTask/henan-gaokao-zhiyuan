@@ -1535,6 +1535,8 @@ let state = null;
 let dataVersion = '';  // 服务器数据版本号
 let syncTimer = null;
 let serverAvailable = false;
+let saveLock = false;   // 保存锁，防止并发保存
+let saveQueued = false; // 是否有待处理的保存请求
 
 function gid(){ return 'g'+Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-3) }
 
@@ -1607,6 +1609,7 @@ async function afterLogin(){
   render();
   startSyncPolling();
   updateSyncStatus(true);
+  checkViewParam();
   // 动画结束后彻底隐藏遮罩
   setTimeout(()=>{ overlay.style.display = 'none'; }, 420);
 }
@@ -1655,6 +1658,17 @@ function updateSyncStatus(online){
   label.textContent = online ? '已连接服务器' : '离线（本地保存）';
 }
 
+function updateSaveStatus(status){
+  const dot = document.getElementById('syncDot');
+  if(!dot) return;
+  const circle = dot.querySelector('.sd-circle');
+  const label = document.getElementById('syncLabel');
+  if(status === 'saving'){
+    circle.className = 'sd-circle syncing';
+    label.textContent = '保存中...';
+  }
+}
+
 function startSyncPolling(){
   if(syncTimer) clearInterval(syncTimer);
   syncTimer = setInterval(async ()=>{
@@ -1695,8 +1709,22 @@ function saveLocal(s){
 async function saveState(){
   saveLocal(state);
   if(serverAvailable){
-    const ok = await saveToServer(state);
-    updateSyncStatus(ok);
+    if(saveLock){
+      saveQueued = true;  // 标记有待处理的保存，当前保存完成后会重新调用
+      return;
+    }
+    saveLock = true;
+    updateSaveStatus('saving');
+    try{
+      const ok = await saveToServer(state);
+      updateSyncStatus(ok);
+    }finally{
+      saveLock = false;
+      if(saveQueued){
+        saveQueued = false;
+        saveState(); // 立即执行排队中的保存
+      }
+    }
   }
 }
 
@@ -2711,6 +2739,14 @@ document.getElementById('importFile').addEventListener('change',function(){
 });
 
 /* ---------- view mode ---------- */
+function checkViewParam(){
+  // 通过 URL 参数 ?view 直接进入查看模式（如 /?view 或 /?view=1）
+  const params = new URLSearchParams(window.location.search);
+  if(params.has('view') && !document.body.classList.contains('view-mode')){
+    toggleViewMode();
+  }
+}
+
 function toggleViewMode(){
   const isView = document.body.classList.toggle('view-mode');
   if(isView){
@@ -3044,6 +3080,7 @@ async function init(){
         render();
         startSyncPolling();
         updateSyncStatus(true);
+        checkViewParam();
         return;
       }
     }
@@ -3061,6 +3098,7 @@ async function init(){
     document.getElementById('loginOverlay').style.display = 'none';
     render();
     updateSyncStatus(false);
+    checkViewParam();
     toast('服务器未连接，使用本地数据（离线模式）');
   }
 }

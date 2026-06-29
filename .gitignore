@@ -10,3 +10,5 @@ volunteer_data.json
 # 导出文件
 *.pdf
 *.png
+
+docs
