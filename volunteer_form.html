@@ -132,6 +132,70 @@ body::before{
 .stat-pill b{color:var(--ink);font-family:var(--display);font-weight:600}
 .stat-pill .lim{color:var(--terra)}
 
+/* ---------- filter bar ---------- */
+.filter-bar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin-bottom:18px;padding:12px 16px;
+  background:var(--paper-2);border:1px solid var(--line);
+  border-radius:var(--radius);
+}
+.filter-search{
+  display:flex;align-items:center;flex:1;min-width:200px;position:relative;
+}
+.filter-search .fs-icon{
+  position:absolute;left:10px;width:15px;height:15px;color:var(--muted);pointer-events:none;
+}
+.filter-search input{
+  width:100%;font-family:var(--sans);font-size:13.5px;color:var(--ink);
+  background:#fff;border:1px solid var(--line);border-radius:9px;
+  padding:7px 30px 7px 32px;transition:border-color .15s, box-shadow .15s;
+}
+.filter-search input:focus{
+  outline:none;border-color:var(--gold-soft);box-shadow:0 0 0 3px rgba(168,124,47,.12);
+}
+.filter-search input::placeholder{color:var(--muted)}
+.filter-clear-btn{
+  position:absolute;right:6px;width:22px;height:22px;border-radius:50%;
+  border:none;background:var(--line-soft);color:var(--muted);cursor:pointer;
+  display:grid;place-items:center;font-size:11px;transition:all .15s;
+}
+.filter-clear-btn:hover{background:var(--terra-soft);color:var(--terra)}
+.filter-group{display:flex;align-items:center;gap:5px}
+.filter-label{
+  font-size:10.5px;letter-spacing:.8px;color:var(--muted);font-weight:500;
+  text-transform:uppercase;white-space:nowrap;
+}
+.filter-chip{
+  font-family:var(--sans);font-size:11.5px;font-weight:500;padding:3.5px 10px;
+  border-radius:20px;border:1px solid var(--line);background:#fff;
+  color:var(--ink-soft);cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.filter-chip:hover{border-color:var(--gold-soft);color:var(--ink)}
+.filter-chip.active{background:var(--ink);color:#F4EFE4;border-color:var(--ink)}
+.filter-chip.active.strat-rush{background:var(--gold);border-color:var(--gold);color:#fff}
+.filter-chip.active.strat-stable{background:var(--teal);border-color:var(--teal);color:#fff}
+.filter-chip.active.strat-protect{background:var(--sage);border-color:var(--sage);color:#fff}
+.filter-chip.active.plan{background:var(--teal);border-color:var(--teal);color:#fff}
+.filter-count{
+  font-size:12px;color:var(--muted);white-space:nowrap;
+}
+.filter-count b{color:var(--ink);font-family:var(--display);font-weight:600}
+.filter-reset{
+  font-family:var(--sans);font-size:11.5px;color:var(--muted);cursor:pointer;
+  border:none;background:none;padding:4px 8px;border-radius:6px;transition:all .15s;
+  white-space:nowrap;
+}
+.filter-reset:hover{color:var(--terra)}
+.filter-chips-row{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.filter-no-result{
+  text-align:center;padding:40px 20px;color:var(--muted);
+  border:2px dashed var(--line);border-radius:var(--radius);
+}
+.filter-no-result .fnr-icon{font-size:32px;margin-bottom:8px;opacity:.4}
+.filter-no-result p{font-size:13.5px}
+
 /* ---------- volunteer list ---------- */
 .vlist{display:flex;flex-direction:column;gap:14px}
 .group{
@@ -389,6 +453,18 @@ body::before{
   .majors{padding-left:18px}
   .modal{max-height:92vh}
   .field.row2,.field.row3{grid-template-columns:1fr}
+  .filter-bar{padding:8px 10px;gap:6px;flex-direction:column}
+  .filter-search{min-width:100%}
+  .filter-chips-row{
+    flex-wrap:nowrap;
+    overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+    padding-bottom:2px;
+  }
+  .filter-chips-row::-webkit-scrollbar{display:none}
+  .filter-chip{flex-shrink:0;font-size:10.5px;padding:3px 8px}
+  .filter-label{font-size:10px}
+  .filter-count{font-size:11px;margin-left:0}
+  .filter-reset{font-size:10.5px}
 }
 .sortable-ghost{opacity:.3}
 .sortable-chosen{box-shadow:0 0 0 2px var(--gold-soft)}
@@ -507,7 +583,7 @@ body::before{
 /* ---------- view mode ---------- */
 body.view-mode .wrap{max-width:920px}
 body.view-mode .topbar,body.view-mode .rules,body.view-mode .toolbar,
-body.view-mode .vlist,body.view-mode .foot-note{display:none}
+body.view-mode .filter-bar,body.view-mode .vlist,body.view-mode .foot-note{display:none}
 body.view-mode{background:#fff}
 
 .view-toolbar{
@@ -1143,6 +1219,42 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
     <div class="spacer"></div>
     <span class="stat-pill">已填 <b id="cntGroups">0</b> 个专业组（显示 <b id="cntVisible">0</b> · 隐藏 <b id="cntHidden">0</b>）</span>
     <span class="stat-pill">共 <b id="cntMajors">0</b> 个专业 · 上限 <span class="lim">48组×6</span></span>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar" id="filterBar">
+    <div class="filter-search">
+      <svg class="fs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" id="filterKeyword" placeholder="搜索院校名称、代码、专业组..." oninput="onFilterChange()">
+      <button class="filter-clear-btn" id="filterClearBtn" onclick="clearFilterKeyword()" title="清除搜索" style="display:none">✕</button>
+    </div>
+    <div class="filter-chips-row">
+    <div class="filter-group">
+      <span class="filter-label">策略</span>
+      <button class="filter-chip strat-rush" data-dim="strategy" data-val="冲" onclick="toggleFilterChip(this)">冲</button>
+      <button class="filter-chip strat-stable" data-dim="strategy" data-val="稳" onclick="toggleFilterChip(this)">稳</button>
+      <button class="filter-chip strat-protect" data-dim="strategy" data-val="保" onclick="toggleFilterChip(this)">保</button>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">类型</span>
+      <button class="filter-chip plan" data-dim="planType" data-val="普通组" onclick="toggleFilterChip(this)">普通组</button>
+      <button class="filter-chip plan" data-dim="planType" data-val="国家专项计划" onclick="toggleFilterChip(this)">国家专项</button>
+      <button class="filter-chip plan" data-dim="planType" data-val="高校专项计划" onclick="toggleFilterChip(this)">高校专项</button>
+      <button class="filter-chip plan" data-dim="planType" data-val="地方专项计划" onclick="toggleFilterChip(this)">地方专项</button>
+      <button class="filter-chip plan" data-dim="planType" data-val="中外合作办学" onclick="toggleFilterChip(this)">中外合作</button>
+      <button class="filter-chip plan" data-dim="planType" data-val="定向就业" onclick="toggleFilterChip(this)">定向</button>
+      <button class="filter-chip plan" data-dim="planType" data-val="预科班" onclick="toggleFilterChip(this)">预科</button>
+      <button class="filter-chip plan" data-dim="planType" data-val="其他" onclick="toggleFilterChip(this)">其他</button>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">显示</span>
+      <button class="filter-chip active" data-dim="hidden" data-val="all" onclick="toggleFilterHidden(this)">全部</button>
+      <button class="filter-chip" data-dim="hidden" data-val="visible" onclick="toggleFilterHidden(this)">仅显示</button>
+      <button class="filter-chip" data-dim="hidden" data-val="hidden" onclick="toggleFilterHidden(this)">仅隐藏</button>
+    </div>
+    </div>
+    <span class="filter-count" id="filterCount"></span>
+    <button class="filter-reset" id="filterReset" onclick="clearAllFilters()" style="display:none">清除全部筛选</button>
   </div>
 
   <!-- VOLUNTEER LIST -->
@@ -1831,6 +1943,126 @@ function latestHist(cfg){
   return null;
 }
 
+/* ---------- filter ---------- */
+let filterState = {
+  keyword: '',          // 搜索关键词
+  strategy: new Set(),  // 选中的策略 '冲'|'稳'|'保'
+  planType: new Set(),  // 选中的计划类型
+  hidden: 'all'         // 'all' | 'visible' | 'hidden'
+};
+
+let filterDebounceTimer = null;
+
+function onFilterChange(){
+  const kw = document.getElementById('filterKeyword').value;
+  const clearBtn = document.getElementById('filterClearBtn');
+  if(kw !== filterState.keyword){
+    filterState.keyword = kw;
+  }
+  clearBtn.style.display = kw ? '' : 'none';
+  updateFilterResetBtn();
+  // 防抖：输入时 200ms 后触发渲染
+  if(filterDebounceTimer) clearTimeout(filterDebounceTimer);
+  filterDebounceTimer = setTimeout(()=>{
+    filterDebounceTimer = null;
+    render(true);
+  }, 200);
+}
+
+function toggleFilterChip(el){
+  const dim = el.dataset.dim;
+  const val = el.dataset.val;
+  const set = filterState[dim];
+  if(set.has(val)){
+    set.delete(val);
+    el.classList.remove('active');
+  }else{
+    set.add(val);
+    el.classList.add('active');
+  }
+  updateFilterResetBtn();
+  render(true);
+}
+
+function toggleFilterHidden(el){
+  // 互斥：取消所有 hidden chip 的 active
+  document.querySelectorAll('.filter-chip[data-dim="hidden"]').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  filterState.hidden = el.dataset.val;
+  updateFilterResetBtn();
+  render(true);
+}
+
+function clearFilterKeyword(){
+  document.getElementById('filterKeyword').value = '';
+  filterState.keyword = '';
+  document.getElementById('filterClearBtn').style.display = 'none';
+  updateFilterResetBtn();
+  render(true);
+}
+
+function clearAllFilters(){
+  // 重置关键词
+  document.getElementById('filterKeyword').value = '';
+  filterState.keyword = '';
+  document.getElementById('filterClearBtn').style.display = 'none';
+  // 重置策略 chips
+  filterState.strategy.clear();
+  document.querySelectorAll('.filter-chip[data-dim="strategy"]').forEach(c=>c.classList.remove('active'));
+  // 重置类型 chips
+  filterState.planType.clear();
+  document.querySelectorAll('.filter-chip[data-dim="planType"]').forEach(c=>c.classList.remove('active'));
+  // 重置显示状态
+  filterState.hidden = 'all';
+  document.querySelectorAll('.filter-chip[data-dim="hidden"]').forEach(c=>c.classList.remove('active'));
+  const allChip = document.querySelector('.filter-chip[data-dim="hidden"][data-val="all"]');
+  if(allChip) allChip.classList.add('active');
+  // 隐藏重置按钮
+  document.getElementById('filterReset').style.display = 'none';
+  render(true);
+}
+
+function hasActiveFilter(){
+  return filterState.keyword !== '' ||
+    filterState.strategy.size > 0 ||
+    filterState.planType.size > 0 ||
+    filterState.hidden !== 'all';
+}
+
+function updateFilterResetBtn(){
+  document.getElementById('filterReset').style.display = hasActiveFilter() ? '' : 'none';
+}
+
+/* filter groups, returns filtered array */
+function filterGroups(groups){
+  let filtered = groups;
+  // 关键词筛选
+  if(filterState.keyword){
+    const kw = filterState.keyword.toLowerCase();
+    filtered = filtered.filter(g=>{
+      return (g.schoolName||'').toLowerCase().includes(kw) ||
+        String(g.schoolCode||'').toLowerCase().includes(kw) ||
+        String(g.groupCode||'').toLowerCase().includes(kw) ||
+        (g.groupName||'').toLowerCase().includes(kw);
+    });
+  }
+  // 策略筛选 (OR)
+  if(filterState.strategy.size > 0){
+    filtered = filtered.filter(g=>filterState.strategy.has(g.strategy||''));
+  }
+  // 计划类型筛选 (OR)
+  if(filterState.planType.size > 0){
+    filtered = filtered.filter(g=>filterState.planType.has(g.planType||''));
+  }
+  // 显示/隐藏筛选
+  if(filterState.hidden === 'visible'){
+    filtered = filtered.filter(g=>g.hidden!==true);
+  }else if(filterState.hidden === 'hidden'){
+    filtered = filtered.filter(g=>g.hidden===true);
+  }
+  return filtered;
+}
+
 /* ---------- icons ---------- */
 const IC = {
   edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
@@ -1848,8 +2080,15 @@ function render(skipSave){
   list.innerHTML = '';
   if(!state.groups.length){
     list.innerHTML = `<div class="empty-state"><div class="ei">📋</div><h3>还没有志愿</h3><p>点击「新增志愿组」开始编排，或「导入」已有数据。</p></div>`;
+    document.getElementById('filterBar').style.display = 'none';
   }else{
-    state.groups.forEach((g,i)=> list.appendChild(renderGroup(g,i)));
+    document.getElementById('filterBar').style.display = '';
+    const filtered = filterGroups(state.groups);
+    if(!filtered.length && hasActiveFilter()){
+      list.innerHTML = `<div class="filter-no-result"><div class="fnr-icon">🔍</div><p>没有匹配的志愿组</p><p style="font-size:12px;margin-top:6px">请尝试调整筛选条件</p></div>`;
+    }else{
+      filtered.forEach((g,i)=> list.appendChild(renderGroup(g,i)));
+    }
   }
   updateStats();
   initSortables();
@@ -2025,6 +2264,16 @@ function updateStats(){
   if(visEl) visEl.textContent = visible;
   const hidEl = document.getElementById('cntHidden');
   if(hidEl) hidEl.textContent = hidden;
+  // 更新筛选计数
+  const cntEl = document.getElementById('filterCount');
+  if(cntEl && state.groups.length > 0){
+    const filtered = filterGroups(state.groups);
+    if(hasActiveFilter()){
+      cntEl.innerHTML = `筛选 <b>${filtered.length}</b> / ${state.groups.length} 组`;
+    }else{
+      cntEl.innerHTML = `共 <b>${state.groups.length}</b> 组`;
+    }
+  }
 }
 
 /* ---------- toggle / collapse ---------- */
@@ -2591,8 +2840,24 @@ function initSortables(){
       dragClass:'group dragging',
       onEnd(e){
         if(e.oldIndex===e.newIndex) return;
-        const item = state.groups.splice(e.oldIndex,1)[0];
-        state.groups.splice(e.newIndex,0,item);
+        if(hasActiveFilter()){
+          // 筛选模式下：DOM 索引是筛选后的，通过 data-id 映射回 state.groups 原始位置
+          const domGroups = Array.from(list.querySelectorAll('.group'));
+          const movedId = domGroups[e.oldIndex]?.dataset?.id;
+          const targetId = domGroups[e.newIndex]?.dataset?.id;
+          if(!movedId || !targetId || movedId===targetId) return;
+          const origIdx = state.groups.findIndex(g=>g.id===movedId);
+          let targetIdx = state.groups.findIndex(g=>g.id===targetId);
+          if(origIdx<0||targetIdx<0) return;
+          const item = state.groups.splice(origIdx, 1)[0];
+          // 重新取 targetIdx（移除后索引可能已偏移）
+          targetIdx = state.groups.findIndex(g=>g.id===targetId);
+          const insertIdx = e.oldIndex < e.newIndex ? targetIdx + 1 : targetIdx;
+          state.groups.splice(insertIdx, 0, item);
+        }else{
+          const item = state.groups.splice(e.oldIndex,1)[0];
+          state.groups.splice(e.newIndex,0,item);
+        }
         render();
       }
     });
@@ -2850,6 +3115,7 @@ function toggleViewMode(){
     url.searchParams.delete('view');
     url.searchParams.delete('password'); // 确保密码参数已被清除
     history.replaceState(null, '', url);
+    render(true); // 恢复编辑模式时刷新列表（应用筛选）
     toast('已返回编辑模式');
   }
 }
