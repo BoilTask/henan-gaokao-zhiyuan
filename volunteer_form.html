@@ -2753,9 +2753,15 @@ function toggleViewMode(){
     renderViewDoc();
     document.getElementById('btnViewMode').textContent = '';
     window.scrollTo(0,0);
+    const url = new URL(window.location);
+    url.searchParams.set('view', '1');
+    history.replaceState(null, '', url);
     toast('已切换到查看模式');
   }else{
     document.getElementById('btnViewMode').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 查看模式';
+    const url = new URL(window.location);
+    url.searchParams.delete('view');
+    history.replaceState(null, '', url);
     toast('已返回编辑模式');
   }
 }
