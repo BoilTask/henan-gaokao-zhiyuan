@@ -1,5 +1,6 @@
 # 二进制文件
 server.exe
+server
 server_linux
 *.exe
 
@@ -10,5 +11,8 @@ volunteer_data.json
 # 导出文件
 *.pdf
 *.png
+
+# 部署脚本（含服务器 IP）
+deploy.sh
 
 docs

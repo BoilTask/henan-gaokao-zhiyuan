@@ -1037,6 +1037,31 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
 .sync-dot .sd-circle.offline{background:var(--terra);box-shadow:0 0 0 3px var(--terra-soft)}
 .sync-dot .sd-circle.syncing{background:var(--gold);box-shadow:0 0 0 3px #F3EAD9;animation:pulse 1s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ---------- 保存中遮罩 ---------- */
+.saving-overlay{
+  position:fixed;inset:0;background:rgba(21,33,46,.28);
+  backdrop-filter:blur(3px);z-index:500;
+  display:none;align-items:center;justify-content:center;
+  cursor:wait;
+}
+.saving-overlay.show{display:flex}
+.saving-card{
+  background:var(--paper-2);border:1px solid var(--line);
+  border-radius:16px;box-shadow:var(--shadow-lg);
+  padding:28px 36px;display:flex;align-items:center;gap:14px;
+  animation:pop .22s cubic-bezier(.2,.9,.3,1.2);
+}
+.saving-spinner{
+  width:28px;height:28px;border:3px solid var(--line);
+  border-top-color:var(--gold);border-radius:50%;
+  animation:spin .7s linear infinite;flex:none;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.saving-text{
+  font-family:var(--serif);font-size:15px;font-weight:600;
+  color:var(--ink-soft);white-space:nowrap;
+}
 </style>
 </head>
 <body>
@@ -1445,6 +1470,14 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
   </div>
 </div>
 
+<!-- ========== SAVING OVERLAY ========== -->
+<div class="saving-overlay" id="savingOverlay">
+  <div class="saving-card">
+    <div class="saving-spinner"></div>
+    <span class="saving-text">正在同步到服务器…</span>
+  </div>
+</div>
+
 <script>
 /* ============================================================
    河南新高考志愿草表 · 数据与逻辑
@@ -1535,8 +1568,9 @@ let state = null;
 let dataVersion = '';  // 服务器数据版本号
 let syncTimer = null;
 let serverAvailable = false;
-let saveLock = false;   // 保存锁，防止并发保存
-let saveQueued = false; // 是否有待处理的保存请求
+let saveDebounceTimer = null; // 防抖定时器，快速编辑时合并保存
+let isSaving = false;         // 是否正在向服务器保存（期间阻止编辑）
+let saveQueued = false;       // 是否有待处理的保存请求
 
 function gid(){ return 'g'+Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-3) }
 
@@ -1672,6 +1706,7 @@ function updateSaveStatus(status){
 function startSyncPolling(){
   if(syncTimer) clearInterval(syncTimer);
   syncTimer = setInterval(async ()=>{
+    if(isSaving) return;  // 正在保存中，跳过本轮轮询，避免覆盖本地编辑
     try{
       const serverData = await loadFromServer();
       if(serverData !== null){
@@ -1706,27 +1741,63 @@ function saveLocal(s){
   try{ localStorage.setItem('hn2026_volunteer', JSON.stringify(s)); }catch(e){}
 }
 
-async function saveState(){
-  saveLocal(state);
-  if(serverAvailable){
-    if(saveLock){
-      saveQueued = true;  // 标记有待处理的保存，当前保存完成后会重新调用
-      return;
-    }
-    saveLock = true;
-    updateSaveStatus('saving');
-    try{
-      const ok = await saveToServer(state);
-      updateSyncStatus(ok);
-    }finally{
-      saveLock = false;
-      if(saveQueued){
-        saveQueued = false;
-        saveState(); // 立即执行排队中的保存
-      }
+function showSavingOverlay(){
+  document.getElementById('savingOverlay').classList.add('show');
+}
+function hideSavingOverlay(){
+  document.getElementById('savingOverlay').classList.remove('show');
+}
+
+/* 实际执行服务器保存（带遮罩保护） */
+async function doSaveToServer(){
+  if(isSaving){
+    saveQueued = true;  // 当前正在保存，标记排队
+    return;
+  }
+  isSaving = true;
+  showSavingOverlay();
+  updateSaveStatus('saving');
+  try{
+    const ok = await saveToServer(state);
+    updateSyncStatus(ok);
+  }finally{
+    isSaving = false;
+    if(saveQueued){
+      saveQueued = false;
+      doSaveToServer(); // 继续执行排队保存，遮罩保持显示
+    }else{
+      hideSavingOverlay();
     }
   }
 }
+
+/* 触发保存：本地立即存，服务器防抖后存 */
+async function saveState(){
+  saveLocal(state);  // 本地存储立即执行，不掉数据
+  if(!serverAvailable) return;
+  // 防抖：200ms 内的连续编辑只触发一次服务器保存
+  if(saveDebounceTimer) clearTimeout(saveDebounceTimer);
+  saveDebounceTimer = setTimeout(()=>{
+    saveDebounceTimer = null;
+    doSaveToServer();
+  }, 200);
+}
+
+/* 页面关闭/隐藏时立即同步（防止防抖未触发导致数据丢失） */
+window.addEventListener('beforeunload', ()=>{
+  if(saveDebounceTimer){
+    clearTimeout(saveDebounceTimer);
+    saveDebounceTimer = null;
+    // 用 keepalive 确保请求在页面关闭后也能完成
+    if(serverAvailable && !isSaving){
+      const body = JSON.stringify({data:state});
+      const headers = {'Content-Type': 'application/json'};
+      const tok = getToken();
+      if(tok) headers['X-Session'] = tok;
+      try{ fetch(API + '/api/data', {method:'POST', headers, body, keepalive:true}); }catch(e){}
+    }
+  }
+});
 
 /* normalize config */
 function normalizeConfig(c){
@@ -2738,6 +2809,22 @@ document.getElementById('importFile').addEventListener('change',function(){
   if(this.files[0]) document.getElementById('importText').placeholder = '已选择文件：'+this.files[0].name+'，点击「执行导入」即可';
 });
 
+/* ---------- password param ---------- */
+function checkPasswordParam(){
+  // 通过 URL 参数 ?password 自动填写密码并登录（如 /?password=gaokao2026）
+  const params = new URLSearchParams(window.location.search);
+  const pw = params.get('password');
+  if(pw){
+    document.getElementById('loginPassword').value = pw;
+    // 从 URL 中移除密码参数，避免泄露
+    const url = new URL(window.location);
+    url.searchParams.delete('password');
+    history.replaceState(null, '', url);
+    // 自动触发登录
+    doLogin();
+  }
+}
+
 /* ---------- view mode ---------- */
 function checkViewParam(){
   // 通过 URL 参数 ?view 直接进入查看模式（如 /?view 或 /?view=1）
@@ -2755,12 +2842,14 @@ function toggleViewMode(){
     window.scrollTo(0,0);
     const url = new URL(window.location);
     url.searchParams.set('view', '1');
+    url.searchParams.delete('password'); // 确保密码参数已被清除
     history.replaceState(null, '', url);
     toast('已切换到查看模式');
   }else{
     document.getElementById('btnViewMode').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> 查看模式';
     const url = new URL(window.location);
     url.searchParams.delete('view');
+    url.searchParams.delete('password'); // 确保密码参数已被清除
     history.replaceState(null, '', url);
     toast('已返回编辑模式');
   }
@@ -3098,6 +3187,7 @@ async function init(){
   if(serverReachable){
     // 服务器可达但未登录 → 显示登录遮罩，等待密码验证
     updateSyncStatus(false);
+    checkPasswordParam();
     // 不渲染数据，等登录成功后再加载
   }else{
     // 服务器不可达 → 离线模式，直接使用本地数据
