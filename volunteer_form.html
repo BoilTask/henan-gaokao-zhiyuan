@@ -3281,8 +3281,9 @@ function renderViewDoc(){
       const stratCls = stratClassMap[strat] || '';
       const planLabel = g.planType || '—';
       const majors = g.majors || [];
-      const row1m = majors.slice(0, 3);
-      const row2m = majors.slice(3, 6);
+      // 交错排列：第一行 1,3,5 / 第二行 2,4,6
+      const row1m = [majors[0], majors[2], majors[4]].filter(m => m !== undefined);
+      const row2m = [majors[1], majors[3], majors[5]].filter(m => m !== undefined);
       const hasRow2 = row2m.length > 0;
       const rowSpan = hasRow2 ? ' rowspan="2"' : '';
       // row background class
@@ -3294,7 +3295,7 @@ function renderViewDoc(){
         for (let i = 0; i < 3; i++) {
           if (i < ms.length) {
             const m = ms[i];
-            tds += `<td class="vs-mseq">${startIdx + i + 1}</td>`;
+            tds += `<td class="vs-mseq">${startIdx + i * 2 + 1}</td>`;
             tds += `<td class="vs-mcode">${esc(m.code)}</td>`;
             tds += `<td class="vs-mname">${esc(m.name)}</td>`;
           } else {
@@ -3318,7 +3319,7 @@ function renderViewDoc(){
       if (hasRow2) {
         html += `
         <tr class="${rowBg}">
-          ${majorTds(row2m, 3)}
+          ${majorTds(row2m, 1)}
         </tr>`;
       }
 
