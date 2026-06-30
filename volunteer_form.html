@@ -160,7 +160,7 @@ body::before{
   display:grid;place-items:center;font-size:11px;transition:all .15s;
 }
 .filter-clear-btn:hover{background:var(--terra-soft);color:var(--terra)}
-.filter-group{display:flex;align-items:center;gap:5px}
+.filter-group{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .filter-label{
   font-size:10.5px;letter-spacing:.8px;color:var(--muted);font-weight:500;
   text-transform:uppercase;white-space:nowrap;
@@ -186,12 +186,6 @@ body::before{
   white-space:nowrap;
 }
 .filter-reset:hover{color:var(--terra)}
-.filter-chips-row{
-  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-}
-.filter-bottom{
-  display:flex;align-items:center;gap:8px;
-}
 .filter-no-result{
   text-align:center;padding:40px 20px;color:var(--muted);
   border:2px dashed var(--line);border-radius:var(--radius);
@@ -456,19 +450,15 @@ body::before{
   .majors{padding-left:18px}
   .modal{max-height:92vh}
   .field.row2,.field.row3{grid-template-columns:1fr}
-  .filter-bar{padding:8px 10px;gap:6px;flex-direction:column;align-items:stretch}
-  .filter-search{min-width:0;flex:auto}
-  .filter-chips-row{
-    flex-wrap:nowrap;
-    overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
-    padding-bottom:2px;
-  }
-  .filter-chips-row::-webkit-scrollbar{display:none}
-  .filter-chips-row .filter-group{flex-shrink:0}
-  .filter-chip{flex-shrink:0;font-size:10.5px;padding:3px 8px}
+  /* filter bar */
+  .filter-bar{flex-direction:column;align-items:stretch;gap:8px;padding:10px 12px}
+  .filter-search{flex:auto;min-width:0}
+  .filter-search input{font-size:13px;padding:7px 30px 7px 32px}
+  .filter-group{gap:4px}
+  .filter-chip{font-size:11px;padding:3px 8px}
   .filter-label{font-size:10px}
-  .filter-count{font-size:11px;margin-left:0}
-  .filter-reset{font-size:10.5px}
+  .filter-count{font-size:11px;margin-left:0;align-self:flex-end}
+  .filter-reset{align-self:flex-end}
 }
 .sortable-ghost{opacity:.3}
 .sortable-chosen{box-shadow:0 0 0 2px var(--gold-soft)}
@@ -934,6 +924,17 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
   .toolbar .btn svg{width:13px;height:13px}
   .stat-pill{font-size:11px;padding:5px 10px;width:100%;justify-content:center}
   .toolbar .spacer{display:none}
+  /* filter bar — 极致紧凑 */
+  .filter-bar{padding:8px 10px;gap:6px}
+  .filter-search{min-width:0}
+  .filter-search input{font-size:12px;padding:6px 28px 6px 30px}
+  .filter-search .fs-icon{left:8px;width:13px;height:13px}
+  .filter-clear-btn{right:4px;width:20px;height:20px;font-size:10px}
+  .filter-group{gap:3px}
+  .filter-chip{font-size:10.5px;padding:2.5px 7px}
+  .filter-label{font-size:9.5px}
+  .filter-count{font-size:10.5px}
+  .filter-reset{font-size:10.5px}
   /* group card — 手机端头部紧凑布局 */
   .group-head{flex-wrap:wrap;gap:6px;padding:10px 12px;row-gap:4px}
   .gdrag{display:none}
@@ -1232,7 +1233,6 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
       <input type="text" id="filterKeyword" placeholder="搜索院校名称、代码、专业组..." oninput="onFilterChange()">
       <button class="filter-clear-btn" id="filterClearBtn" onclick="clearFilterKeyword()" title="清除搜索" style="display:none">✕</button>
     </div>
-    <div class="filter-chips-row">
     <div class="filter-group">
       <span class="filter-label">策略</span>
       <button class="filter-chip strat-rush" data-dim="strategy" data-val="冲" onclick="toggleFilterChip(this)">冲</button>
@@ -1256,11 +1256,8 @@ body.view-mode .view-doc{display:block;animation:viewFade .3s ease}
       <button class="filter-chip" data-dim="hidden" data-val="visible" onclick="toggleFilterHidden(this)">仅显示</button>
       <button class="filter-chip" data-dim="hidden" data-val="hidden" onclick="toggleFilterHidden(this)">仅隐藏</button>
     </div>
-    </div>
-    <div class="filter-bottom">
     <span class="filter-count" id="filterCount"></span>
     <button class="filter-reset" id="filterReset" onclick="clearAllFilters()" style="display:none">清除全部筛选</button>
-    </div>
   </div>
 
   <!-- VOLUNTEER LIST -->
